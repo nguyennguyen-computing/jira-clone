@@ -1,0 +1,26 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2022",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@jira-clone/auth": ["libs/auth/src/index.ts"],
+      "@jira-clone/home": ["libs/home/src/index.ts"],
+      "@jira-clone/project": ["libs/project/src/index.ts"],
+      "@jira-clone/shell": ["libs/client/shell/src/index.ts"],
+      "@jira-clone/svg-icon": ["libs/ui/components/svg-icon/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

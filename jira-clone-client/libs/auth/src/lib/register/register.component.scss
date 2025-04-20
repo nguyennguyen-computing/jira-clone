@@ -1,0 +1,19 @@
+:host {
+  @apply flex items-center justify-center min-h-screen;
+}
+
+nz-card {
+  @apply bg-white p-6 rounded-lg;
+}
+
+nz-form-item {
+  @apply mb-4;
+}
+
+nz-input-group input {
+  @apply py-2 px-3 text-base;
+}
+
+button[nz-button] {
+  @apply p-0 font-semibold;
+}

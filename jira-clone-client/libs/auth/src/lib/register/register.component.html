@@ -1,0 +1,73 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-backgroundLightest"
+>
+  <nz-card class="w-full max-w-sm mx-4 sm:max-w-md shadow-md">
+    <h2 class="text-2xl font-bold text-textDarkest text-center mb-6">
+      Create your account
+    </h2>
+    <form
+      nz-form
+      [formGroup]="registerForm"
+      (ngSubmit)="submit()"
+      class="space-y-4"
+    >
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please enter a valid email">
+          <nz-input-group>
+            <input
+              nz-input
+              type="email"
+              formControlName="email"
+              placeholder="Email"
+              class="w-full rounded border border-borderLight focus:border-borderInputFocus"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Password must be at least 6 characters">
+          <nz-input-group>
+            <input
+              nz-input
+              type="password"
+              formControlName="password"
+              placeholder="Password"
+              class="w-full rounded border border-borderLight focus:border-borderInputFocus"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control
+          [nzErrorTip]="registerForm.errors?.['mismatch'] ? 'Passwords do not match' : 'Please confirm your password'"
+        >
+          <nz-input-group>
+            <input
+              nz-input
+              type="password"
+              formControlName="confirmPassword"
+              placeholder="Confirm Password"
+              class="w-full rounded border border-borderLight focus:border-borderInputFocus"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          class="w-full p-0 bg-primary text-white hover:bg-blue-600"
+          [disabled]="registerForm.invalid || isSubmitting()"
+          [nzLoading]="isSubmitting()"
+        >
+          Sign up
+        </button>
+      </nz-form-item>
+    </form>
+    <div class="text-center mt-4">
+      <span class="text-textMedium">Already have an account? </span>
+      <a routerLink="/login" class="text-textLink hover:underline">Log in</a>
+    </div>
+  </nz-card>
+</div>

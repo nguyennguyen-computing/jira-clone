@@ -1,0 +1,64 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-backgroundLightest"
+>
+  <nz-card class="w-full max-w-sm mx-4 sm:max-w-md shadow-md">
+    <h2 class="text-2xl font-bold text-textDarkest text-center mb-6">
+      Log in to your account
+    </h2>
+    <form
+      nz-form
+      [formGroup]="loginForm"
+      (ngSubmit)="submit()"
+      class="space-y-4"
+    >
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please enter a valid email">
+          <nz-input-group>
+            <input
+              nz-input
+              type="email"
+              formControlName="email"
+              placeholder="Email"
+              class="w-full rounded border border-borderLight focus:border-borderInputFocus"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Password must be at least 6 characters">
+          <nz-input-group>
+            <input
+              nz-input
+              type="password"
+              formControlName="password"
+              placeholder="Password"
+              class="w-full rounded border border-borderLight focus:border-borderInputFocus"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <label nz-checkbox formControlName="remember">Remember me</label>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          class="w-full bg-primary text-white hover:bg-blue-600"
+          [disabled]="loginForm.invalid || isSubmitting()"
+          [nzLoading]="isSubmitting()"
+        >
+          Log in
+        </button>
+      </nz-form-item>
+    </form>
+    <div class="text-center mt-4">
+      <a routerLink="/register" class="text-textLink hover:underline"
+        >Create an account</a
+      >
+    </div>
+  </nz-card>
+</div>
