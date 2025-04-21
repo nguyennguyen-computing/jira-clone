@@ -1,10 +1,16 @@
-import { Component, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { AuthStore } from '@jira-clone/auth/data-access';
 
 @Component({
   selector: 'app-register',
@@ -15,14 +21,20 @@ import { NzCardModule } from 'ng-zorro-antd/card';
     NzInputModule,
     NzButtonModule,
     NzCardModule,
-    RouterLink,
+    RouterLink
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
+  private readonly authStore = inject(AuthStore);
+
   registerForm: FormGroup;
   isSubmitting = signal(false);
+
+  get isLoading() {
+    return this.authStore.isLoading();
+  }
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.registerForm = this.fb.group(
@@ -44,10 +56,7 @@ export class RegisterComponent {
   submit(): void {
     if (this.registerForm.valid) {
       this.isSubmitting.set(true);
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-        this.isSubmitting.set(false);
-      }, 1000);
+      this.authStore.register(this.registerForm.getRawValue());
     } else {
       this.registerForm.markAllAsTouched();
     }

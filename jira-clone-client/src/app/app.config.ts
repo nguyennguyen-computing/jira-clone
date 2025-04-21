@@ -12,6 +12,9 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NZ_JIRA_ICONS } from '../../libs/client/shell/src/lib/shell/layout/models/icons.const';
+import { API_URL } from '@jira-clone/http-client';
+import { environment } from 'src/enviroments/enviroment';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,5 +26,7 @@ export const appConfig: ApplicationConfig = {
       BrowserAnimationsModule,
       NzIconModule.forRoot(NZ_JIRA_ICONS),
     ]),
+    { provide: API_URL, useValue: environment.api_url },
+    provideHttpClient(),
   ],
 };
