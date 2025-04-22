@@ -48,8 +48,8 @@
           nzType="primary"
           type="submit"
           class="w-full bg-primary text-white hover:bg-blue-600"
-          [disabled]="loginForm.invalid || isSubmitting()"
-          [nzLoading]="isSubmitting()"
+          [disabled]="loginForm.invalid || isLoading"
+          [nzLoading]="isLoading"
         >
           Log in
         </button>

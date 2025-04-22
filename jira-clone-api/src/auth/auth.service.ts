@@ -7,6 +7,7 @@ import { User } from './schemas/user.schema';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { Types } from 'mongoose';
+import { LoginResponse } from './models';
 
 @Injectable()
 export class AuthService {
@@ -43,23 +44,33 @@ export class AuthService {
     return user.save();
   }
 
-  async login(loginDto: LoginDto): Promise<string> {
+  async login(loginDto: LoginDto): Promise<LoginResponse> {
     const { email, password } = loginDto;
-
+  
     // Find user
     const user = await this.userModel.findOne({ email });
     if (!user) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
-
+  
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
-
+  
     // Generate JWT
-    const payload = { sub: user._id, email: user.email };
-    return this.jwtService.sign(payload);
+    const payload = { sub: user.id, email: user.email };
+    const token = this.jwtService.sign(payload);
+  
+    // Return the response matching AuthResponse
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+      token,
+    };
   }
 }

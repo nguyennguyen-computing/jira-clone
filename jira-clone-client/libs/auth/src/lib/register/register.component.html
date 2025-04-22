@@ -58,7 +58,7 @@
           nzType="primary"
           type="submit"
           class="w-full p-0 bg-primary text-white hover:bg-blue-600"
-          [disabled]="registerForm.invalid || isSubmitting()"
+          [disabled]="registerForm.invalid || isLoading"
           [nzLoading]="isLoading"
         >
           Sign up

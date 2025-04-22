@@ -6,17 +6,10 @@ export interface AuthModel {
 export interface RegisterResponse {
   id: string;
   name: string;
-  avatarUrl: string;
-  projectId: string;
+  avatarUrl?: string;
   email: string;
   password: string;
 }
-
-export type AuthState = {
-  loggedIn: boolean;
-  user: RegisterResponse | null;
-  loading: boolean;
-};
 
 export const initialUserValue: RegisterResponse = {
   email: '',
@@ -24,11 +17,37 @@ export const initialUserValue: RegisterResponse = {
   password: '',
   id: '',
   avatarUrl: '',
-  projectId: '',
 };
 
+export interface AuthState {
+  user: { id: string; email: string; name: string; avatarUrl?: string } | null;
+  token: string | null;
+  loggedIn: boolean;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface RegisterData {
+  email: string;
+  password: string;
+  name: string;
+  avatarUrl?: string;
+}
+
+export interface AuthResponse {
+  user: { id: string; email: string; name: string };
+  token: string;
+}
+
 export const authInitialState: AuthState = {
-  loggedIn: false,
-  user: initialUserValue,
+  user: null,
+  token: localStorage.getItem('token'),
+  loggedIn: !!localStorage.getItem('token'),
   loading: false,
+  error: null,
 };

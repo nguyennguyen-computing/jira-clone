@@ -21,7 +21,10 @@
       "@jira-clone/http-client": ["libs/core/http-client/src/index.ts"],
       "@jira-clone/project": ["libs/project/src/index.ts"],
       "@jira-clone/shell": ["libs/client/shell/src/index.ts"],
-      "@jira-clone/svg-icon": ["libs/ui/components/svg-icon/src/index.ts"]
+      "@jira-clone/svg-icon": ["libs/ui/components/svg-icon/src/index.ts"],
+      "@jira-clone/token-interceptor": [
+        "libs/core/token-interceptor/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
