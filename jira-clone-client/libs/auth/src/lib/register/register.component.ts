@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -21,7 +21,7 @@ import { AuthStore } from '@jira-clone/auth/data-access';
     NzInputModule,
     NzButtonModule,
     NzCardModule,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
@@ -30,7 +30,6 @@ export class RegisterComponent {
   private readonly authStore = inject(AuthStore);
 
   registerForm: FormGroup;
-  isSubmitting = signal(false);
 
   get isLoading() {
     return this.authStore.isLoading();
@@ -47,18 +46,19 @@ export class RegisterComponent {
     );
   }
 
-  private matchingPasswordsValidator(form: FormGroup) {
-    const password = form.get('password')?.value;
-    const confirmPassword = form.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { mismatch: true };
-  }
-
   submit(): void {
     if (this.registerForm.valid) {
-      this.isSubmitting.set(true);
       this.authStore.register(this.registerForm.getRawValue());
     } else {
       this.registerForm.markAllAsTouched();
     }
+  }
+
+  private matchingPasswordsValidator(
+    form: FormGroup
+  ): { mismatch: boolean } | null {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { mismatch: true };
   }
 }

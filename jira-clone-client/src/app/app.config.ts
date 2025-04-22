@@ -14,7 +14,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NZ_JIRA_ICONS } from '../../libs/client/shell/src/lib/shell/layout/models/icons.const';
 import { API_URL } from '@jira-clone/http-client';
 import { environment } from 'src/enviroments/enviroment';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { tokenInterceptor } from '@jira-clone/token-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,5 +29,6 @@ export const appConfig: ApplicationConfig = {
     ]),
     { provide: API_URL, useValue: environment.api_url },
     provideHttpClient(),
+    provideHttpClient(withInterceptors([tokenInterceptor])),
   ],
 };

@@ -1,32 +1,70 @@
-import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
+import {
+  signalStore,
+  withState,
+  withMethods,
+  withComputed,
+  patchState,
+} from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
-import { exhaustMap, pipe } from 'rxjs';
+import { exhaustMap, map, pipe } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
-import { authInitialState, AuthModel, AuthState } from './auth.model';
+import { computed } from '@angular/core';
+import {
+  authInitialState,
+  AuthState,
+  LoginCredentials,
+  RegisterData,
+  AuthResponse,
+  RegisterResponse,
+} from './auth.model';
 
 export const AuthStore = signalStore(
   { providedIn: 'root' },
   withState<AuthState>(authInitialState),
+  withComputed(({ loggedIn, token, user, loading, error }) => ({
+    isLoggedIn: computed(() => loggedIn()),
+    authToken: computed(() => token()),
+    currentUser: computed(() => user()),
+    isLoading: computed(() => loading()),
+    errorMessage: computed(() => error()),
+  })),
   withMethods(
     (store, authService = inject(AuthService), router = inject(Router)) => ({
-      register: rxMethod<AuthModel>(
+      register: rxMethod<RegisterData>(
         pipe(
-          exhaustMap((newUserData) => {
-            patchState(store, { user: null, loggedIn: false, loading: true });
-            return authService.register(newUserData).pipe(
+          exhaustMap((registerData) => {
+            patchState(store, {
+              user: null,
+              loggedIn: false,
+              loading: true,
+              error: null,
+            });
+            return authService.register(registerData).pipe(
               tapResponse({
-                next: (user) => {
-                  patchState(store, { user, loggedIn: true, loading: false });
+                next: (response: RegisterResponse) => {
+                  patchState(store, {
+                    user: {
+                      id: response.id,
+                      email: response.email,
+                      name: response.name,
+                      avatarUrl: response.avatarUrl,
+                    },
+
+                    loading: false,
+                  });
+
                   router.navigateByUrl('/login');
                 },
-                error: ({ error }) => {
+                error: (err: any) => {
                   patchState(store, {
                     user: null,
+                    token: null,
                     loggedIn: false,
                     loading: false,
+                    error: err.message || 'Registration failed',
                   });
                 },
               })
@@ -34,7 +72,52 @@ export const AuthStore = signalStore(
           })
         )
       ),
-      isLoading: () => store.loading(),
+      login: rxMethod<LoginCredentials>(
+        pipe(
+          exhaustMap((credentials) => {
+            patchState(store, {
+              user: null,
+              loggedIn: false,
+              loading: true,
+              error: null,
+            });
+            return authService.login(credentials).pipe(
+              tapResponse({
+                next: (response: AuthResponse) => {
+                  patchState(store, {
+                    user: response.user,
+                    token: response.token,
+                    loggedIn: true,
+                    loading: false,
+                  });
+                  localStorage.setItem('token', response.token);
+                  router.navigateByUrl('/home');
+                },
+                error: (err: any) => {
+                  patchState(store, {
+                    user: null,
+                    token: null,
+                    loggedIn: false,
+                    loading: false,
+                    error: err.message || 'Login failed',
+                  });
+                },
+              })
+            );
+          })
+        )
+      ),
+      logout() {
+        patchState(store, {
+          user: null,
+          token: null,
+          loggedIn: false,
+          loading: false,
+          error: null,
+        });
+        localStorage.removeItem('token');
+        router.navigateByUrl('/login');
+      },
     })
   )
 );
