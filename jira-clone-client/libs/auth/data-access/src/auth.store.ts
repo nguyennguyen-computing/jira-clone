@@ -9,7 +9,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
-import { exhaustMap, map, pipe } from 'rxjs';
+import { exhaustMap, pipe } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { computed } from '@angular/core';
 import {
@@ -33,6 +33,19 @@ export const AuthStore = signalStore(
   })),
   withMethods(
     (store, authService = inject(AuthService), router = inject(Router)) => ({
+      restoreState() {
+        const user = localStorage.getItem('user');
+        const token = localStorage.getItem('token');
+
+        if (user && token) {
+          patchState(store, {
+            user: JSON.parse(user),
+            token,
+            loggedIn: true,
+            loading: false,
+          });
+        }
+      },
       register: rxMethod<RegisterData>(
         pipe(
           exhaustMap((registerData) => {
@@ -84,13 +97,15 @@ export const AuthStore = signalStore(
             return authService.login(credentials).pipe(
               tapResponse({
                 next: (response: AuthResponse) => {
+                  const { user, token } = response.token;
                   patchState(store, {
-                    user: response.user,
-                    token: response.token,
+                    user: response.token.user,
+                    token: response.token.token,
                     loggedIn: true,
                     loading: false,
                   });
-                  localStorage.setItem('token', response.token);
+                  localStorage.setItem('user', JSON.stringify(user));
+                  localStorage.setItem('token', token);
                   router.navigateByUrl('/home');
                 },
                 error: (err: any) => {
@@ -115,6 +130,7 @@ export const AuthStore = signalStore(
           loading: false,
           error: null,
         });
+        localStorage.removeItem('user');
         localStorage.removeItem('token');
         router.navigateByUrl('/login');
       },

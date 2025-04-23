@@ -40,8 +40,16 @@ export interface RegisterData {
 }
 
 export interface AuthResponse {
+  message: string;
   user: { id: string; email: string; name: string };
-  token: string;
+  token: {
+    user: {
+      id: string;
+      email: string;
+      name: string;
+    };
+    token: string;
+  };
 }
 
 export const authInitialState: AuthState = {
