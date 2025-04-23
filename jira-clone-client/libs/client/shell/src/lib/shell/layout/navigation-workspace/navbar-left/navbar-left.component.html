@@ -62,39 +62,46 @@
       </div>
     </div>
     <div class="flex-auto"></div>
-    <!-- <div class="item" *ngIf="authQuery.user$ | async as user"> -->
-    <div
-      nz-tooltip
-      [nzTooltipTitle]="'nguyennx2'"
-      nzTooltipPlacement="right"
-      class="itemIcon"
-    >
-      <!-- <j-avatar class="flex" [avatarUrl]="user.avatarUrl" [size]="26">
-        </j-avatar> -->
-    </div>
-  </div>
-  <div class="item">
-    <a
-      nz-popover
-      nzPopoverPlacement="rightBottom"
-      [nzPopoverContent]="aboutPopoverTmpl"
-      nzPopoverTrigger="click"
-    >
+    <div class="item" *ngIf="currentUser() as user">
       <div
         nz-tooltip
-        nzTooltipTitle="About"
+        [nzTooltipTitle]="user?.name"
         nzTooltipPlacement="right"
         class="itemIcon"
       >
-        <i
-          class="text-xl text-white"
-          nz-icon
-          nzType="question-circle"
-          nzTheme="fill"
+        <lib-avatar
+          class="flex"
+          [avatarUrl]="
+            'https://res.cloudinary.com/djpjhi7he/image/upload/v1745415472/489990523_2146009485840867_8331654386203959477_n_hnsq9z.jpg'
+          "
+          [size]="26"
         >
-        </i>
+        </lib-avatar>
       </div>
-    </a>
+    </div>
+    <div class="item">
+      <a
+        nz-popover
+        nzPopoverPlacement="rightBottom"
+        [nzPopoverContent]="aboutPopoverTmpl"
+        nzPopoverTrigger="click"
+      >
+        <div
+          nz-tooltip
+          nzTooltipTitle="About"
+          nzTooltipPlacement="right"
+          class="itemIcon"
+        >
+          <i
+            class="text-xl text-white"
+            nz-icon
+            nzType="question-circle"
+            nzTheme="fill"
+          >
+          </i>
+        </div>
+      </a>
+    </div>
   </div>
 </aside>
 
@@ -111,8 +118,16 @@
         >nguyen016279&#64;gmail.com</a
       >
     </p>
-    <a href="https://trungk18.com/" target="_blank">
-      <!-- <j-button className="btn-primary">Visit My Blog</j-button> -->
+    <a target="_blank">
+      <button
+        nz-button
+        nzType="primary"
+        type="submit"
+        class="w-full p-0 bg-primary text-white hover:bg-blue-600"
+        (click)="signOut()"
+      >
+        Sign out
+      </button>
     </a>
   </div>
 </ng-template>
