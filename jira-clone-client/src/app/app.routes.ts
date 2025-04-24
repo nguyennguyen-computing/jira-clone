@@ -1,5 +1,4 @@
 import { Route } from '@angular/router';
-import { LoginComponent, RegisterComponent } from '@jira-clone/auth';
 
 export const appRoutes: Route[] = [
   {
@@ -17,8 +16,8 @@ export const appRoutes: Route[] = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
     path: 'home',
-    loadComponent() {
-      return import('@jira-clone/shell').then((m) => m.ShellComponent);
+    loadChildren() {
+      return import('@jira-clone/shell').then((m) => m.shellRoutes);
     },
   },
 ];

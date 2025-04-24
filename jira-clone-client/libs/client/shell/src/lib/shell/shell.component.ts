@@ -3,12 +3,18 @@ import { CommonModule } from '@angular/common';
 import { NavigationComponent } from './layout/navigation-workspace/navigation/navigation.component';
 import { RouterModule } from '@angular/router';
 import { SvgDefinitionComponent } from '@jira-clone/svg-icon';
+import { shellRoutes } from './shell.routes';
 
 @Component({
   selector: 'lib-shell',
-  imports: [CommonModule, NavigationComponent, RouterModule, SvgDefinitionComponent],
+  imports: [
+    CommonModule,
+    NavigationComponent,
+    RouterModule,
+    SvgDefinitionComponent,
+  ],
   templateUrl: './shell.component.html',
-  styleUrl: './shell.component.scss'
+  styleUrl: './shell.component.scss',
 })
 export class ShellComponent {
   expanded = signal<boolean>(true);
