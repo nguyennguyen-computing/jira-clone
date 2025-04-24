@@ -9,6 +9,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { AvatarComponent } from '@jira-clone/svg-icon';
 import { AuthStore } from '@jira-clone/auth/data-access';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { CreateProjectComponent } from '../../../components/create-project/create-project.component';
 
 @Component({
   selector: 'app-navbar-left',
@@ -20,7 +21,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     NzIconModule,
     AvatarComponent,
     NzButtonModule,
-  ],
+],
   providers: [NzDrawerService, NzModalService],
   templateUrl: './navbar-left.component.html',
   styleUrl: './navbar-left.component.scss',
@@ -30,6 +31,7 @@ export class NavbarLeftComponent {
 
   currentUser = this.authStore.currentUser;
   items: NavItem[] = [];
+  isCreateProjectModalVisible = false
 
   constructor(
     private _drawerService: NzDrawerService,
@@ -42,11 +44,25 @@ export class NavbarLeftComponent {
     this.items = [
       new NavItem('search', 'Search issues', this.openSearchDrawler.bind(this)),
       new NavItem('plus', 'Create issue', this.openCreateIssueModal.bind(this)),
+      new NavItem(
+        'plus',
+        'Create project',
+        this.openCreateProjectModal.bind(this)
+      ),
     ];
     console.log(this.currentUser());
   }
 
   openCreateIssueModal(): void {}
+
+  openCreateProjectModal(): void {
+    this._modalService.create({
+      nzContent: CreateProjectComponent,
+      nzClosable: false,
+      nzFooter: null,
+      nzWidth: 640
+    });
+  }
 
   openSearchDrawler(): void {}
 
