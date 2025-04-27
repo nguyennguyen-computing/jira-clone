@@ -1,8 +1,9 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarLeftComponent } from '../navbar-left/navbar-left.component';
 import { ResizerComponent } from '../resizer/resizer.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navigation',
@@ -17,10 +18,13 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 })
 export class NavigationComponent {
   expanded = input.required<boolean>();
-
   manualToggle = output<void>();
 
-  constructor() {}
+  private router = inject(Router);
+
+  get isShowSideBar(): boolean {
+    return this.router.url.includes('/project');
+  }
 
   toggle() {
     this.manualToggle.emit();
