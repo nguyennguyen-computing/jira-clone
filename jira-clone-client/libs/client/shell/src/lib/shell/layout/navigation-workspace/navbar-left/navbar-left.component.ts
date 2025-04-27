@@ -50,7 +50,6 @@ export class NavbarLeftComponent {
         this.openCreateProjectModal.bind(this)
       ),
     ];
-    console.log(this.currentUser());
   }
 
   openCreateIssueModal(): void {}

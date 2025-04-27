@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { authGuard, loginGuard } from '@jira-clone/auth-guard';
 
 export const appRoutes: Route[] = [
   {
@@ -6,18 +7,20 @@ export const appRoutes: Route[] = [
     loadComponent() {
       return import('@jira-clone/auth').then((m) => m.RegisterComponent);
     },
+    canActivate: [loginGuard],
   },
   {
     path: 'login',
     loadComponent() {
       return import('@jira-clone/auth').then((m) => m.LoginComponent);
     },
+    canActivate: [loginGuard],
   },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
-    path: 'home',
+    path: '',
     loadChildren() {
       return import('@jira-clone/shell').then((m) => m.shellRoutes);
     },
+    canActivate: [authGuard],
   },
 ];
