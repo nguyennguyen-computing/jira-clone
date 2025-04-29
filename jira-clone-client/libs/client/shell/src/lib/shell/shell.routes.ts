@@ -6,17 +6,23 @@ export const shellRoutes: Routes = [
     path: '',
     component: ShellComponent,
     children: [
-
       {
-        path: 'projects',
+        path: 'project/:id',
         loadComponent: () =>
           import('@jira-clone/project').then(
             (m) => m.ProjectComponent
           ),
       },
       {
+        path: 'home',
+        loadComponent: () =>
+          import('@jira-clone/home').then(
+            (m) => m.HomeComponent
+          ),
+      },
+      {
         path: '**',
-        redirectTo: 'projects',
+        redirectTo: 'home',
       },
     ],
   },

@@ -1,1 +1,172 @@
-<p>Home works!</p>
+<!-- projects-table.component.html -->
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-gray-900">
+        Project Management Dashboard
+      </h1>
+      <p class="mt-2 text-sm text-gray-500">
+        Track and manage all your projects in one place
+      </p>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-6">
+      <div class="container">
+        <!-- Search and Filter Controls -->
+        <div class="flex justify-between items-center mb-4">
+          <div class="flex items-center">
+            <nz-input-group [nzSuffix]="suffixIconSearch" class="w-64">
+              <input
+                type="text"
+                nz-input
+                placeholder="Search projects..."
+                [(ngModel)]="searchValue"
+                (input)="search()"
+              />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <span nz-icon nzType="search"></span>
+            </ng-template>
+          </div>
+
+          <div class="flex space-x-2">
+            <!-- Status filter dropdown -->
+
+            <button
+              nz-dropdown
+              [nzDropdownMenu]="menu"
+              nz-button
+              nz-dropdown
+              class="flex items-center"
+            >
+              <span>Status</span>
+              <span nz-icon nzType="down"></span>
+            </button>
+
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item *ngFor="let filter of statusFilters">
+                  <label
+                    nz-checkbox
+                    [ngModel]="filter.checked"
+                    (ngModelChange)="updateStatusFilter(filter.value, $event)"
+                  >
+                    <nz-tag [nzColor]="getStatusColor(filter.value)">{{
+                      filter.text
+                    }}</nz-tag>
+                  </label>
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+
+            <!-- Priority filter dropdown -->
+            <nz-dropdown-menu>
+              <button nz-button nz-dropdown class="flex items-center">
+                <span>Priority</span>
+                <span nz-icon nzType="down"></span>
+              </button>
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item *ngFor="let filter of priorityFilters">
+                  <label
+                    nz-checkbox
+                    [ngModel]="filter.checked"
+                    (ngModelChange)="updatePriorityFilter(filter.value, $event)"
+                  >
+                    <span class="flex items-center">
+                      <span
+                        nz-icon
+                        [nzType]="getPriorityIcon(filter.value)"
+                        [style.color]="getPriorityColor(filter.value)"
+                      ></span>
+                      <span class="ml-2">{{ filter.text }}</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+
+            <!-- Reset button -->
+            <button nz-button (click)="resetFilters()">
+              <span nz-icon nzType="clear"></span>
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Main Table -->
+        <nz-table
+          #projectTable
+          [nzData]="filteredProjects"
+          [nzFrontPagination]="true"
+          [nzPageSize]="10"
+          [nzShowSizeChanger]="true"
+          [nzPageSizeOptions]="[10, 20, 50]"
+          nzTableLayout="fixed"
+          class="bg-white shadow rounded"
+        >
+          <thead>
+            <tr>
+              <th nzColumnKey="name" [nzSortFn]="true" [nzWidth]="'220'">
+                Project
+              </th>
+              <th nzColumnKey="budget" [nzSortFn]="true" [nzWidth]="'150'">
+                Budget
+              </th>
+              <th nzColumnKey="endDate" [nzSortFn]="true" [nzWidth]="'120'">
+                End Date
+              </th>
+              <th nzColumnKey="status" [nzSortFn]="true" [nzWidth]="'140'">
+                Project Status
+              </th>
+              <th nzColumnKey="priority" [nzSortFn]="true" [nzWidth]="'180'">
+                Project Priority
+              </th>
+              <th nzColumnKey="storyPoints" [nzSortFn]="true" [nzWidth]="'120'">
+                Story Points
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let project of projectTable.data">
+              <td>
+                <div class="flex items-center">
+                  <div
+                    class="mr-3 w-8 h-8 flex items-center justify-center bg-blue-100 rounded"
+                  >
+                    <span
+                      nz-icon
+                      [nzType]="project.icon || ''"
+                      nzTheme="outline"
+                      class="text-blue-600"
+                    ></span>
+                  </div>
+                  <span class="font-medium">{{ project.name }}</span>
+                </div>
+              </td>
+              <td>{{ project.budget | currency }}</td>
+              <td>{{ project.endDate | date : 'dd/MMM/yy' }}</td>
+              <td>
+                <nz-tag [nzColor]="getStatusColor(project.status)">{{
+                  project.status
+                }}</nz-tag>
+              </td>
+              <td>
+                <div class="flex items-center">
+                  <span
+                    nz-icon
+                    [nzType]="getPriorityIcon(project.priority)"
+                    [style.color]="getPriorityColor(project.priority)"
+                    class="mr-2"
+                  ></span>
+                  <span>{{ project.priority }}</span>
+                </div>
+              </td>
+              <td>{{ project.storyPoints | number }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </div>
+</div>

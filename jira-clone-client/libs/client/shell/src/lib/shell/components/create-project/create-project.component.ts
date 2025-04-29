@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ButtonComponent } from '@jira-clone/svg-icon';
 import {
   FormBuilder,
   FormGroup,
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    ButtonComponent
   ],
   templateUrl: './create-project.component.html',
   styleUrl: './create-project.component.scss',
