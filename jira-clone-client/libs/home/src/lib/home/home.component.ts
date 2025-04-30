@@ -1,5 +1,5 @@
 // projects-table.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -15,6 +15,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { Router } from '@angular/router';
 
 interface Project {
   id: number;
@@ -48,6 +49,7 @@ interface Project {
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  private readonly router = inject(Router);
   // Direct data initialization in component
   projects: Project[] = [
     {
@@ -310,5 +312,9 @@ export class HomeComponent {
     this.statusFilters.forEach((filter) => (filter.checked = false));
     this.priorityFilters.forEach((filter) => (filter.checked = false));
     this.search();
+  }
+
+  goToProject(projectId: number): void {
+    this.router.navigate(['/project', projectId]);
   }
 }

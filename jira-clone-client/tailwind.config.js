@@ -4,15 +4,7 @@ module.exports = {
   separator: ':',
   purge: {
     enabled: true,
-    content: [
-      './src/**/*.ts',
-      './src/**/*.html',
-      './libs/auth/src/**/*.{html,ts,scss}',
-      './libs/client/shell/src/**/*.{html,ts,scss}',
-      './libs/client/home/src/**/*.{html,ts,scss}',
-      './libs/ui/components/svg-icon/src/**/*.{html,ts,scss}',
-      './libs/ui/components/src/**/*.{html,ts,scss}',
-    ],
+    content: ['./src/**/*.{html,ts,scss}', './libs/**/*.{html,ts,scss}'],
     options: {
       whitelistPatterns: [
         /^font/,
@@ -26,6 +18,15 @@ module.exports = {
         /^mb-/,
         /^mt-/,
         /^ng-/,
+      ],
+      safelist: [
+        /^pl-/,
+        /^pr-/,
+        /^mt-/,
+        /^mb-/,
+        /^mx-/,
+        /^my-/,
+        /^btn-/,
       ],
     },
   },

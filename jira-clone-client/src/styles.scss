@@ -1,11 +1,12 @@
-@import "ng-zorro-antd/ng-zorro-antd.min.css";
+@import 'ng-zorro-antd/ng-zorro-antd.min.css';
+@import './assets/styles/custom.scss';
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-@import './assets/styles/custom.scss';
 
-html, body {
-  height: 100vh
+html,
+body {
+  height: 100vh;
 }
 
 .pre-bootstrapping-container {
