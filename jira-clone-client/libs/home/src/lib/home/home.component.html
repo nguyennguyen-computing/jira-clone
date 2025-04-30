@@ -130,16 +130,18 @@
           <tbody>
             <tr *ngFor="let project of projectTable.data">
               <td>
-                <div class="flex items-center">
+                <div
+                  (click)="goToProject(project.id)"
+                  class="flex items-center cursor-pointer"
+                >
                   <div
                     class="mr-3 w-8 h-8 flex items-center justify-center bg-blue-100 rounded"
                   >
-                    <span
-                      nz-icon
+                    <nz-icon
                       [nzType]="project.icon || ''"
-                      nzTheme="outline"
                       class="text-blue-600"
-                    ></span>
+                      nzTheme="outline"
+                    />
                   </div>
                   <span class="font-medium">{{ project.name }}</span>
                 </div>

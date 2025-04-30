@@ -2,7 +2,7 @@
   [type]="type()"
   [ngClass]="[
     'btn',
-    className,
+    className(),
     isActive() ? 'is-active' : '',
     content?.innerHTML?.trim() ? '' : 'icon-only'
   ]"
@@ -15,13 +15,13 @@
   >
   </lib-svg-icon>
   <lib-svg-icon
-    *ngIf="isWorking"
+    *ngIf="isWorking()"
     name="spin"
     class="spinner"
     [size]="iconSize()"
   >
   </lib-svg-icon>
-  <span #content [class.with-padding]="isWorking || icon">
+  <span #content [class.with-padding]="isWorking() || icon()">
     <ng-content></ng-content>
   </span>
 </button>
