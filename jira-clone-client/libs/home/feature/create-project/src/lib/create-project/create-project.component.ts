@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { ButtonComponent } from '@jira-clone/svg-icon';
 import {
   FormBuilder,
@@ -7,18 +7,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NzModalRef } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'lib-create-project',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ButtonComponent
-  ],
+  imports: [CommonModule, ReactiveFormsModule, ButtonComponent],
   templateUrl: './create-project.component.html',
   styleUrl: './create-project.component.scss',
 })
 export class CreateProjectComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly _modalRef = inject(NzModalRef);
+
   @Output() createProject = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
 
@@ -27,11 +27,9 @@ export class CreateProjectComponent {
   projectForm: FormGroup;
 
   categories = ['Software Project', 'Business Project', 'Marketing Project'];
-  constructor(private fb: FormBuilder) {
+  constructor() {
     this.projectForm = this.fb.group({
-      id: ['', [Validators.required]],
       name: ['', [Validators.required]],
-      url: [''],
       description: [''],
       category: ['Software Project'],
       users: [[]],
@@ -65,5 +63,9 @@ export class CreateProjectComponent {
     this.isVisible = false;
     this.cancel.emit();
     this.projectForm.reset();
+  }
+
+  closeModal(): void {
+    this._modalRef.close();
   }
 }

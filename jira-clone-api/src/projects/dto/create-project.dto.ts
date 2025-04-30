@@ -1,11 +1,11 @@
-import { IsString, IsOptional, IsArray } from 'class-validator';
+import { IsString, IsOptional, IsArray, IsDate } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
-  id: string;
+  name: string;
 
   @IsString()
-  name: string;
+  owner: string;
 
   @IsString()
   @IsOptional()
@@ -26,4 +26,19 @@ export class CreateProjectDto {
   @IsArray()
   @IsOptional()
   issues?: string[];
+
+  @IsString()
+  @IsOptional()
+  status?: string;
+
+  @IsString()
+  @IsOptional()
+  priority?: string;
+
+  @IsString()
+  @IsOptional()
+  budget?: string;
+
+  @IsOptional()
+  endDate?: string;
 }

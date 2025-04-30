@@ -8,12 +8,9 @@
   ]"
   [disabled]="disabled()"
 >
-  <lib-svg-icon
-    *ngIf="!isWorking && icon"
-    [name]="icon() || ''"
-    [size]="iconSize()"
-  >
-  </lib-svg-icon>
+  @if (!isWorking() && icon() ) {
+  <lib-svg-icon [name]="icon() || ''" [size]="iconSize()"> </lib-svg-icon>
+  } @if (isWorking()) {
   <lib-svg-icon
     *ngIf="isWorking()"
     name="spin"
@@ -21,6 +18,8 @@
     [size]="iconSize()"
   >
   </lib-svg-icon>
+  }
+
   <span #content [class.with-padding]="isWorking() || icon()">
     <ng-content></ng-content>
   </span>

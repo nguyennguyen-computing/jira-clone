@@ -4,7 +4,7 @@ export class UpdateProjectDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  users?: string[];
+  members?: string[];
 
   @IsOptional()
   @IsString()

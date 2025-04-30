@@ -98,6 +98,7 @@ export const AuthStore = signalStore(
               tapResponse({
                 next: (response: AuthResponse) => {
                   const { user, token } = response.token;
+                  console.log('Login successful:', response);
                   patchState(store, {
                     user: response.token.user,
                     token: response.token.token,

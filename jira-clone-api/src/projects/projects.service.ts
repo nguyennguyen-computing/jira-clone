@@ -17,15 +17,20 @@ export class ProjectsService {
   }
 
   async findAll(
+    userId: string,
     page: number = 1,
     limit: number = 10,
   ): Promise<{ projects: Project[]; total: number }> {
     const skip = (page - 1) * limit;
 
-    const total = await this.projectModel.countDocuments();
+    const filter = {
+      $or: [{ owner: userId }, { users: userId }],
+    };
+
+    const total = await this.projectModel.countDocuments(filter);
 
     const projects = await this.projectModel
-      .find()
+      .find(filter)
       .populate('users issues')
       .skip(skip)
       .limit(limit)
@@ -48,7 +53,10 @@ export class ProjectsService {
       .exec();
   }
 
-  async addIssueToProject(projectId: string, issueId: string): Promise<Project | null> {
+  async addIssueToProject(
+    projectId: string,
+    issueId: string,
+  ): Promise<Project | null> {
     return this.projectModel
       .findByIdAndUpdate(
         projectId,
@@ -69,6 +77,6 @@ export class ProjectsService {
       throw new BadRequestException('Project not found');
     }
 
-    return project.issues;
+    return project.issues || [];
   }
 }
