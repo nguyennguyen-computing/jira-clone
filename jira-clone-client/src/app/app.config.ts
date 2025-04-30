@@ -24,7 +24,6 @@ import en from '@angular/common/locales/en';
 registerLocaleData(en);
 
 const ngZorroConfig: NzConfig = {
-  // You can customize NG-ZORRO default behaviors here
   notification: { nzPlacement: 'topRight' },
   message: { nzTop: 70 }
 };

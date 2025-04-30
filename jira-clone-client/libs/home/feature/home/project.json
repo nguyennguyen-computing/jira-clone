@@ -1,7 +1,7 @@
 {
-  "name": "auth-data-access",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/auth/data-access/src",
+  "name": "home",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/home/feature/home/src",
   "prefix": "lib",
   "projectType": "library",
   "tags": [],
@@ -10,7 +10,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/auth/data-access/jest.config.ts"
+        "jestConfig": "libs/home/feature/home/jest.config.ts"
       }
     },
     "lint": {

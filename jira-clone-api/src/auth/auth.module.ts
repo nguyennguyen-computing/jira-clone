@@ -9,10 +9,11 @@ import { User, UserSchema } from './schemas/user.schema';
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.register({
-      secret: 'your_jwt_secret', // Replace with env variable in production
+      secret: process.env.JWT_SECRET || 'your-secret-key',
       signOptions: { expiresIn: '1h' },
     }),
   ],
+  exports: [JwtModule],
   controllers: [AuthController],
   providers: [AuthService],
 })

@@ -1,9 +1,7 @@
-// projects-table.component.ts
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-// NG-ZORRO Imports
+import { Router } from '@angular/router';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -15,7 +13,10 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-import { Router } from '@angular/router';
+import { ButtonComponent } from '@jira-clone/svg-icon';
+import { CreateProjectComponent } from '@jira-clone/home/create-project';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { ProjectStore } from '@jira-clone/home-data-access';
 
 interface Project {
   id: number;
@@ -44,13 +45,19 @@ interface Project {
     NzBadgeModule,
     NzPopoverModule,
     NzCheckboxModule,
+    ButtonComponent,
   ],
+  providers: [NzModalService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
   private readonly router = inject(Router);
-  // Direct data initialization in component
+  private readonly _modalService = inject(NzModalService);
+  private readonly projectStore = inject(ProjectStore);
+
+  listOfProjects = this.projectStore.projects;
+
   projects: Project[] = [
     {
       id: 1,
@@ -74,7 +81,7 @@ export class HomeComponent {
     },
     {
       id: 3,
-      icon: 'users',
+      icon: 'usergroup-add',
       name: 'Main Team Strategy',
       budget: 150000,
       endDate: new Date('2019-04-25'),
@@ -84,7 +91,7 @@ export class HomeComponent {
     },
     {
       id: 4,
-      icon: 'clipboard-check',
+      icon: 'copy',
       name: 'Team Evaluation',
       budget: 320000,
       endDate: new Date('2019-04-25'),
@@ -124,7 +131,7 @@ export class HomeComponent {
     },
     {
       id: 8,
-      icon: 'file-contract',
+      icon: 'file-done',
       name: 'Smart Contracts',
       budget: 421000,
       endDate: new Date('2019-05-13'),
@@ -134,23 +141,13 @@ export class HomeComponent {
     },
     {
       id: 9,
-      icon: 'video',
+      icon: 'video-camera',
       name: 'AV Techno',
       budget: 219090,
       endDate: new Date('2019-05-20'),
       status: 'READY',
       priority: 'Medium',
       storyPoints: 0,
-    },
-    {
-      id: 10,
-      icon: 'bread-slice',
-      name: 'Malasaña Bakery',
-      budget: 542000,
-      endDate: new Date('2019-05-26'),
-      status: 'OPPORTUNITY',
-      priority: 'Lower Medium',
-      storyPoints: 3,
     },
   ];
 
@@ -177,6 +174,10 @@ export class HomeComponent {
   ];
 
   ngOnInit(): void {
+    this.projectStore.loadProjects({
+      page: this.projectStore.currentPage(),
+      limit: this.projectStore.pageSize(),
+    });
     this.filteredProjects = [...this.projects];
   }
 
@@ -227,13 +228,11 @@ export class HomeComponent {
   search(): void {
     const data = [...this.projects];
 
-    // Apply search filter
     const searchValue = this.searchValue.toLowerCase();
     let result = searchValue
       ? data.filter((item) => item.name.toLowerCase().includes(searchValue))
       : data;
 
-    // Apply status filters
     const activeStatusFilters = this.statusFilters
       .filter((filter) => filter.checked)
       .map((filter) => filter.value);
@@ -244,7 +243,6 @@ export class HomeComponent {
       );
     }
 
-    // Apply priority filters
     const activePriorityFilters = this.priorityFilters
       .filter((filter) => filter.checked)
       .map((filter) => filter.value);
@@ -255,7 +253,6 @@ export class HomeComponent {
       );
     }
 
-    // Sort data if needed
     if (this.sortName && this.sortValue) {
       result = result.sort((a, b) => {
         const key = this.sortName as keyof Project;
@@ -314,7 +311,16 @@ export class HomeComponent {
     this.search();
   }
 
-  goToProject(projectId: number): void {
+  goToProject(projectId: string): void {
     this.router.navigate(['/project', projectId]);
+  }
+
+  openCreateProjectModal(): void {
+    this._modalService.create({
+      nzContent: CreateProjectComponent,
+      nzClosable: false,
+      nzFooter: null,
+      nzWidth: 640,
+    });
   }
 }
