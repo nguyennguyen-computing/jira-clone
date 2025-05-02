@@ -1,4 +1,8 @@
+@import 'quill/dist/quill.core.css';
+@import 'quill/dist/quill.snow.css';
+
 .content-editor {
+  width: 100%;
   .ql-toolbar {
     border-radius: 4px 4px 0px 0px !important;
     border: 1px solid #dfe1e6 !important;

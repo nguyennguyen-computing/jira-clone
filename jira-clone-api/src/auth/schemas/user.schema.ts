@@ -9,11 +9,8 @@ export class User extends Document {
   @Prop({ required: true })
   name: string;
 
-  @Prop()
+  @Prop({default: 'https://res.cloudinary.com/dvujyxh7e/image/upload/c_scale,w_48/v1592405732/ironman_c3jrbc.jpg'})
   avatarUrl: string;
-
-  @Prop({ type: Types.ObjectId, ref: 'Project' })
-  projectId: Types.ObjectId;
 
   @Prop({ required: true, unique: true })
   email: string;

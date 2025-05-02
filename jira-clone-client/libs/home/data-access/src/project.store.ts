@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import {
   signalStore,
   withState,
@@ -20,6 +20,8 @@ interface ProjectState {
   pageSize: number;
   totalItems: number;
   isLoading: boolean;
+  name: string;
+  status: string[];
   error: string | null;
 }
 
@@ -30,35 +32,51 @@ const initialState: ProjectState = {
   totalItems: 0,
   isLoading: false,
   error: null,
+  name: '',
+  status: [],
 };
 
 export const ProjectStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed(({ projects, currentPage, pageSize, totalItems }) => ({
-    totalPages: computed(() => Math.ceil(totalItems() / pageSize())),
-    hasProjects: computed(() => projects().length > 0),
-    isFirstPage: computed(() => currentPage() === 1),
-    isLastPage: computed(
-      () => currentPage() >= Math.ceil(totalItems() / pageSize())
-    ),
-  })),
+  withComputed(
+    ({ projects, currentPage, pageSize, totalItems, name, status }) => ({
+      totalPages: computed(() => Math.ceil(totalItems() / pageSize())),
+      hasProjects: computed(() => projects().length > 0),
+      isFirstPage: computed(() => currentPage() === 1),
+      isLastPage: computed(
+        () => currentPage() >= Math.ceil(totalItems() / pageSize())
+      ),
+      searchedName: computed(() => name()),
+      searchedStatus: computed(() => status()),
+    })
+  ),
   withMethods(
     (
       store,
       projectsService = inject(ProjectsService),
       authStore = inject(AuthStore)
     ) => ({
-      loadProjects: rxMethod<{ page: number; limit: number }>(
+      loadProjects: rxMethod<{
+        page: number;
+        limit: number;
+        name: string;
+        status: string[];
+      }>(
         pipe(
           tap(() => patchState(store, { isLoading: true, error: null })),
-          switchMap(({ page, limit }) =>
+          switchMap(({ page, limit, name, status }) =>
             projectsService
-              .getProjects(authStore.currentUser()?.id || '', page, limit)
+              .getProjects(
+                authStore.currentUser()?.id || '',
+                page,
+                limit,
+                name,
+                status
+              )
               .pipe(
                 tapResponse({
                   next: ({ projects, total }) => {
-                    console.log(authStore.currentUser())
                     patchState(store, {
                       projects,
                       currentPage: page,
@@ -97,7 +115,21 @@ export const ProjectStore = signalStore(
       ),
       setPage(page: number): void {
         patchState(store, { currentPage: page });
-        this.loadProjects({ page, limit: store.pageSize() });
+        this.loadProjects({
+          page,
+          limit: store.pageSize(),
+          name: store.name(),
+          status: store.status(),
+        });
+      },
+      search(name: string, status: string[]): void {
+        patchState(store, { name, status });
+        this.loadProjects({
+          page: store.currentPage(),
+          limit: store.pageSize(),
+          name,
+          status,
+        });
       },
       resetError(): void {
         patchState(store, { error: null });

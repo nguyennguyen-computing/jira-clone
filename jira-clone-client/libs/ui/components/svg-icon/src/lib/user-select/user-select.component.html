@@ -1,0 +1,15 @@
+<nz-select
+  nzShowSearch="true"
+  class="w-full"
+  [formControl]="control()"
+  [nzCustomTemplate]="selectedReporterTmpl"
+  nzNoAnimation
+  (nzOnSearch)="searchUsers($event)"
+>
+  <nz-option nzCustomContent *ngFor="let user of users(); let i = index" [nzValue]="user.id">
+    <lib-user-component [user]="user"></lib-user-component>
+  </nz-option>
+</nz-select>
+<ng-template #selectedReporterTmpl let-selected>
+  <lib-user-component [user]="getUser(selected.nzValue)"></lib-user-component>
+</ng-template>

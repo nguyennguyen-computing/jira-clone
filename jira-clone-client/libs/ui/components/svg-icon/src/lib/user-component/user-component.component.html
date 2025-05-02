@@ -1,0 +1,8 @@
+@if(user(); as user) {
+<div class="flex items-center">
+  <lib-avatar [avatarUrl]="user.avartarUrl || ''" [size]="20"> </lib-avatar>
+  <span class="ml-1-5 mr-1-5 user-name">
+    {{ user.name }}
+  </span>
+</div>
+}

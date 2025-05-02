@@ -18,17 +18,6 @@ import { CreateProjectComponent } from '@jira-clone/home/create-project';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { ProjectStore } from '@jira-clone/home-data-access';
 
-interface Project {
-  id: number;
-  icon?: string;
-  name: string;
-  budget: number;
-  endDate: Date;
-  status: 'ONGOING' | 'READY' | 'OPPORTUNITY' | 'DISCOVERY' | 'LIVE' | 'PARKED';
-  priority: 'Critical' | 'High' | 'Upper Medium' | 'Medium' | 'Lower Medium';
-  storyPoints: number;
-}
-
 @Component({
   selector: 'lib-home',
   imports: [
@@ -58,101 +47,8 @@ export class HomeComponent {
 
   listOfProjects = this.projectStore.projects;
 
-  projects: Project[] = [
-    {
-      id: 1,
-      icon: 'code',
-      name: 'Clean Code',
-      budget: 134000,
-      endDate: new Date('2019-03-25'),
-      status: 'ONGOING',
-      priority: 'High',
-      storyPoints: 4190,
-    },
-    {
-      id: 2,
-      icon: 'robot',
-      name: 'Robot Platfor',
-      budget: 640000,
-      endDate: new Date('2019-04-21'),
-      status: 'READY',
-      priority: 'Upper Medium',
-      storyPoints: 1219,
-    },
-    {
-      id: 3,
-      icon: 'usergroup-add',
-      name: 'Main Team Strategy',
-      budget: 150000,
-      endDate: new Date('2019-04-25'),
-      status: 'OPPORTUNITY',
-      priority: 'Medium',
-      storyPoints: 4500,
-    },
-    {
-      id: 4,
-      icon: 'copy',
-      name: 'Team Evaluation',
-      budget: 320000,
-      endDate: new Date('2019-04-25'),
-      status: 'DISCOVERY',
-      priority: 'Critical',
-      storyPoints: 232,
-    },
-    {
-      id: 5,
-      icon: 'calendar',
-      name: 'Team Workload Vacation',
-      budget: 700000,
-      endDate: new Date('2019-04-25'),
-      status: 'ONGOING',
-      priority: 'Lower Medium',
-      storyPoints: 824534,
-    },
-    {
-      id: 6,
-      icon: 'car',
-      name: 'Self Driving',
-      budget: 320000,
-      endDate: new Date('2019-04-28'),
-      status: 'LIVE',
-      priority: 'Upper Medium',
-      storyPoints: 1319,
-    },
-    {
-      id: 7,
-      icon: 'tag',
-      name: 'Tagline',
-      budget: 540290,
-      endDate: new Date('2019-05-12'),
-      status: 'DISCOVERY',
-      priority: 'Critical',
-      storyPoints: 3131,
-    },
-    {
-      id: 8,
-      icon: 'file-done',
-      name: 'Smart Contracts',
-      budget: 421000,
-      endDate: new Date('2019-05-13'),
-      status: 'PARKED',
-      priority: 'Lower Medium',
-      storyPoints: 5231,
-    },
-    {
-      id: 9,
-      icon: 'video-camera',
-      name: 'AV Techno',
-      budget: 219090,
-      endDate: new Date('2019-05-20'),
-      status: 'READY',
-      priority: 'Medium',
-      storyPoints: 0,
-    },
-  ];
-
-  filteredProjects: Project[] = [];
-  searchValue: string = '';
+  searchValue = '';
+  statusValue: string[] = [];
   sortName: string | null = null;
   sortValue: string | null = null;
 
@@ -177,8 +73,9 @@ export class HomeComponent {
     this.projectStore.loadProjects({
       page: this.projectStore.currentPage(),
       limit: this.projectStore.pageSize(),
+      name: this.searchValue,
+      status: this.statusValue,
     });
-    this.filteredProjects = [...this.projects];
   }
 
   getStatusColor(status: string): string {
@@ -221,79 +118,16 @@ export class HomeComponent {
     this.search();
   }
 
-  filterStatus(status: string[], priority: string[]): void {
-    this.search();
-  }
+  filterStatus(status: string[], priority: string[]): void {}
 
   search(): void {
-    const data = [...this.projects];
-
-    const searchValue = this.searchValue.toLowerCase();
-    let result = searchValue
-      ? data.filter((item) => item.name.toLowerCase().includes(searchValue))
-      : data;
-
-    const activeStatusFilters = this.statusFilters
-      .filter((filter) => filter.checked)
-      .map((filter) => filter.value);
-
-    if (activeStatusFilters.length > 0) {
-      result = result.filter((item) =>
-        activeStatusFilters.includes(item.status)
-      );
-    }
-
-    const activePriorityFilters = this.priorityFilters
-      .filter((filter) => filter.checked)
-      .map((filter) => filter.value);
-
-    if (activePriorityFilters.length > 0) {
-      result = result.filter((item) =>
-        activePriorityFilters.includes(item.priority)
-      );
-    }
-
-    if (this.sortName && this.sortValue) {
-      result = result.sort((a, b) => {
-        const key = this.sortName as keyof Project;
-        const isAsc = this.sortValue === 'ascend';
-
-        let valueA = a[key];
-        let valueB = b[key];
-
-        // Handle dates
-        if (valueA instanceof Date && valueB instanceof Date) {
-          valueA = valueA.getTime();
-          valueB = valueB.getTime();
-        }
-
-        // Handle strings
-        if (typeof valueA === 'string' && typeof valueB === 'string') {
-          valueA = valueA.toLowerCase();
-          valueB = valueB.toLowerCase();
-        }
-
-        return isAsc
-          ? (valueA ?? 0) < (valueB ?? 0)
-            ? -1
-            : (valueA ?? 0) > (valueB ?? 0)
-            ? 1
-            : 0
-          : (valueA ?? 0) > (valueB ?? 0)
-          ? -1
-          : (valueA ?? 0) < (valueB ?? 0)
-          ? 1
-          : 0;
-      });
-    }
-
-    this.filteredProjects = result;
+    this.projectStore.search(this.searchValue, this.statusValue);
   }
 
   updateStatusFilter(status: string, checked: boolean): void {
     const index = this.statusFilters.findIndex((item) => item.value === status);
     this.statusFilters[index].checked = checked;
-    this.search();
+    this.statusValue = this.statusFilters.filter((item) => item.checked).map((item) => item.value)
   }
 
   updatePriorityFilter(priority: string, checked: boolean): void {
@@ -306,6 +140,7 @@ export class HomeComponent {
 
   resetFilters(): void {
     this.searchValue = '';
+    this.statusValue = [];
     this.statusFilters.forEach((filter) => (filter.checked = false));
     this.priorityFilters.forEach((filter) => (filter.checked = false));
     this.search();

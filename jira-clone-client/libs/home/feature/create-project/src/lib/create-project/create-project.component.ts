@@ -1,23 +1,46 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { ButtonComponent } from '@jira-clone/svg-icon';
+import {
+  ButtonComponent,
+  PrioritySelectComponent,
+  UserSelectComponent,
+} from '@jira-clone/svg-icon';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { QuillModule } from 'ngx-quill';
+import { quillConfiguration } from '@jira-clone/config';
+import { UserStore } from '@jira-clone/home-data-access';
 
 @Component({
   selector: 'lib-create-project',
-  imports: [CommonModule, ReactiveFormsModule, ButtonComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ButtonComponent,
+    PrioritySelectComponent,
+    QuillModule,
+    UserSelectComponent,
+  ],
   templateUrl: './create-project.component.html',
   styleUrl: './create-project.component.scss',
 })
 export class CreateProjectComponent {
   private readonly fb = inject(FormBuilder);
   private readonly _modalRef = inject(NzModalRef);
+  private readonly userStore = inject(UserStore);
+  readonly editorOptions = quillConfiguration;
+  readonly listUsers = this.userStore.users;
+  readonly categories = [
+    'Software Project',
+    'Business Project',
+    'Marketing Project',
+  ];
 
   @Output() createProject = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
@@ -25,8 +48,12 @@ export class CreateProjectComponent {
   @Input() isVisible = true;
 
   projectForm: FormGroup;
+  searchControl = new FormControl<string | null>('', { nonNullable: true });
 
-  categories = ['Software Project', 'Business Project', 'Marketing Project'];
+  get priority(): FormControl {
+    return this.projectForm.get('priority') as FormControl;
+  }
+
   constructor() {
     this.projectForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -34,6 +61,8 @@ export class CreateProjectComponent {
       category: ['Software Project'],
       users: [[]],
       issues: [[]],
+      searchOwnerTerm: [''],
+      priority: [''],
     });
   }
 

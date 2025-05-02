@@ -20,7 +20,7 @@ export const initialUserValue: RegisterResponse = {
 };
 
 export interface AuthState {
-  user: { id: string; email: string; name: string; avatarUrl?: string } | null;
+  user: { id: string; email: string; name: string; avartarUrl?: string } | null;
   token: string | null;
   loggedIn: boolean;
   loading: boolean;
@@ -36,12 +36,18 @@ export interface RegisterData {
   email: string;
   password: string;
   name: string;
-  avatarUrl?: string;
+  avartarUrl?: string;
 }
 
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  avartarUrl?: string;
+}
 export interface AuthResponse {
   message: string;
-  user: { id: string; email: string; name: string };
+  user: User;
   token: {
     user: {
       id: string;
