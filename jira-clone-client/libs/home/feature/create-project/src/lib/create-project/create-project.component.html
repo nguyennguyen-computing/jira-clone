@@ -13,29 +13,33 @@
   <form class="project-form" [formGroup]="projectForm">
     <div class="form-group">
       <label class="label"> Name </label>
-      <input
-        class="form-input"
-        placeholder="Project Name"
-        formControlName="name"
-        jAutofocus
-      />
+      <input class="form-input" placeholder="Project Name" />
+    </div>
+    <div class="form-group mt-3">
+      <label class="label"> Project priority </label>
+      <lib-priority-select [control]="priority"></lib-priority-select>
     </div>
     <div class="form-group mt-3">
       <label class="label"> Category </label>
-      <select class="form-input" formControlName="category">
+      <select class="form-input">
         <option *ngFor="let category of categories">
           {{ category }}
         </option>
       </select>
     </div>
     <div class="form-group mt-3">
+      <label class="label"> Owner </label>
+      <lib-user-select [control]="searchControl"> </lib-user-select>
+    </div>
+    <div class="form-group mt-3">
       <label class="label"> Description </label>
-      <textarea
-        class="form-input"
-        placeholder="Project Description"
-        formControlName="description"
+      <quill-editor
+        class="content-editor"
+        [styles]="{ 'min-height': '120px' }"
+        [modules]="editorOptions"
+        [placeholder]="''"
       >
-      </textarea>
+      </quill-editor>
     </div>
     <div class="form-group mt-3">
       <j-button

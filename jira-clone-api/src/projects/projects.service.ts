@@ -20,12 +20,22 @@ export class ProjectsService {
     userId: string,
     page: number = 1,
     limit: number = 10,
+    name?: string,
+    status?: string[],
   ): Promise<{ projects: Project[]; total: number }> {
     const skip = (page - 1) * limit;
 
     const filter = {
       $or: [{ owner: userId }, { users: userId }],
     };
+
+    if (name) {
+      filter['name'] = { $regex: name, $options: 'i' };
+    }
+
+    if (status && status.length > 0) {
+      filter['status'] = { $in: status };
+    }
 
     const total = await this.projectModel.countDocuments(filter);
 

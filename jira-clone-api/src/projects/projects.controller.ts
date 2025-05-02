@@ -25,8 +25,17 @@ export class ProjectsController {
     @Query('userId') userId: string,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
+    @Query('name') name: string = '',
+    @Query('status') status: string = '',
   ) {
-    return this.projectsService.findAll(userId, Number(page), Number(limit));
+    const statusArray = status ? status.split(',') : [];
+    return this.projectsService.findAll(
+      userId,
+      Number(page),
+      Number(limit),
+      name,
+      statusArray,
+    );
   }
 
   @Patch(':id')

@@ -19,12 +19,16 @@ export class ProjectsService {
   getProjects(
     userId: string,
     page: number,
-    limit: number
+    limit: number,
+    name: string = '',
+    status: string[] = []
   ): Observable<ListProjectResponse> {
     const params = new HttpParams()
       .set('userId', userId)
       .set('page', page.toString())
-      .set('limit', limit.toString());
+      .set('limit', limit.toString())
+      .set('name', name)
+      .set('status', status.join(','));
     return this.apiService.get<ListProjectResponse>('/projects', params);
   }
 }

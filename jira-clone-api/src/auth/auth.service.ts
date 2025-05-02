@@ -36,7 +36,6 @@ export class AuthService {
       email,
       password: hashedPassword,
       name: username,
-      avatarUrl: '',
     });
     return user.save();
   }
@@ -62,6 +61,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         name: user.name,
+        avartarUrl: user.avatarUrl,
       },
       token,
     };

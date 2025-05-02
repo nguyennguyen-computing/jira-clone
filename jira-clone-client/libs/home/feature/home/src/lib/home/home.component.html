@@ -29,7 +29,6 @@
                 nz-input
                 placeholder="Search projects..."
                 [(ngModel)]="searchValue"
-                (input)="search()"
               />
             </nz-input-group>
             <ng-template #suffixIconSearch>
@@ -89,7 +88,14 @@
                 </li>
               </ul>
             </nz-dropdown-menu>
-
+            <j-button
+              (click)="search()"
+              [icon]="'search'"
+              [className]="'btn-primary mr-2'"
+              type="submit"
+            >
+              Apply search
+            </j-button>
             <button
               class="flex items-center"
               nz-button
