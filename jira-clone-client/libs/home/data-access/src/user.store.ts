@@ -8,7 +8,7 @@ import {
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { pipe, switchMap, tap } from 'rxjs';
+import { debounceTime, pipe, switchMap, tap } from 'rxjs';
 import { UserService } from './services/user.service';
 import { User } from '@jira-clone/auth/data-access';
 
@@ -36,6 +36,7 @@ export const UserStore = signalStore(
   withMethods((store, userService = inject(UserService)) => ({
     searchUsers: rxMethod<string>(
       pipe(
+        debounceTime(300),
         tap(() => patchState(store, { isLoading: true, error: null })),
         switchMap((name) =>
           userService.searchUser(name).pipe(

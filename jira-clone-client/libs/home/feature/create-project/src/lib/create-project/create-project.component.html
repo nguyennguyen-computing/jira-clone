@@ -13,23 +13,54 @@
   <form class="project-form" [formGroup]="projectForm">
     <div class="form-group">
       <label class="label"> Name </label>
-      <input class="form-input" placeholder="Project Name" />
+      <input
+        class="form-input"
+        formControlName="name"
+        placeholder="Project Name"
+      />
     </div>
     <div class="form-group mt-3">
       <label class="label"> Project priority </label>
       <lib-priority-select [control]="priority"></lib-priority-select>
     </div>
     <div class="form-group mt-3">
-      <label class="label"> Category </label>
-      <select class="form-input">
-        <option *ngFor="let category of categories">
-          {{ category }}
-        </option>
-      </select>
+      <label class="label"> Project category </label>
+      <nz-select
+        class="w-full"
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Select category"
+        formControlName="category"
+      >
+        <nz-option
+          *ngFor="let category of categories"
+          [nzLabel]="category"
+          [nzValue]="category"
+        ></nz-option>
+      </nz-select>
     </div>
     <div class="form-group mt-3">
       <label class="label"> Owner </label>
-      <lib-user-select [control]="searchControl"> </lib-user-select>
+      <lib-user-select [control]="owner"> </lib-user-select>
+    </div>
+
+    <div class="flex mt-3">
+      <div class="form-group w-1/2">
+        <label class="label"> End date </label>
+        <nz-date-picker
+          class="w-2/3"
+          formControlName="endDate"
+        ></nz-date-picker>
+      </div>
+      <div class="w-1/2 form-group">
+        <label class="label">Budget</label>
+        <nz-input-number
+          class="w-full"
+          formControlName="budget"
+          [nzFormatter]="formatterDollar"
+          [nzParser]="parserDollar"
+        />
+      </div>
     </div>
     <div class="form-group mt-3">
       <label class="label"> Description </label>
@@ -38,6 +69,7 @@
         [styles]="{ 'min-height': '120px' }"
         [modules]="editorOptions"
         [placeholder]="''"
+        formControlName="description"
       >
       </quill-editor>
     </div>
@@ -46,6 +78,7 @@
         [className]="'btn-primary mr-2'"
         type="submit"
         [disabled]="projectForm.invalid"
+        (click)="handleSubmit()"
       >
         Save
       </j-button>

@@ -23,6 +23,7 @@ interface ProjectState {
   name: string;
   status: string[];
   error: string | null;
+  projectCreated: boolean;
 }
 
 const initialState: ProjectState = {
@@ -34,6 +35,7 @@ const initialState: ProjectState = {
   error: null,
   name: '',
   status: [],
+  projectCreated: false,
 };
 
 export const ProjectStore = signalStore(
@@ -103,10 +105,15 @@ export const ProjectStore = signalStore(
                   patchState(store, {
                     projects: [...store.projects(), newProject],
                     isLoading: false,
+                    projectCreated: true,
                   });
                 },
                 error: (error: string) => {
-                  patchState(store, { isLoading: false, error });
+                  patchState(store, {
+                    isLoading: false,
+                    error,
+                    projectCreated: false,
+                  });
                 },
               })
             )
@@ -133,6 +140,9 @@ export const ProjectStore = signalStore(
       },
       resetError(): void {
         patchState(store, { error: null });
+      },
+      resetProjectCreated(): void {
+        patchState(store, { projectCreated: false });
       },
     })
   )
