@@ -4,11 +4,17 @@
   [formControl]="control()"
   [nzCustomTemplate]="selectedReporterTmpl"
   nzNoAnimation
+  nzServerSearch="true"
   (nzOnSearch)="searchUsers($event)"
 >
-  <nz-option nzCustomContent *ngFor="let user of users(); let i = index" [nzValue]="user.id">
+  @for (user of users(); track user.id) {
+  <nz-option
+    nzCustomContent
+    [nzValue]="user.id"
+  >
     <lib-user-component [user]="user"></lib-user-component>
   </nz-option>
+  }
 </nz-select>
 <ng-template #selectedReporterTmpl let-selected>
   <lib-user-component [user]="getUser(selected.nzValue)"></lib-user-component>
