@@ -28,6 +28,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { format } from 'date-fns';
 import { AuthStore } from '@jira-clone/auth/data-access';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'lib-create-project',
@@ -51,6 +52,7 @@ export class CreateProjectComponent {
   private readonly userStore = inject(UserStore);
   private readonly authStore = inject(AuthStore);
   private readonly projectStore = inject(ProjectStore);
+  private readonly _notification = inject(NzNotificationService);
 
   readonly editorOptions = quillConfiguration;
   readonly listUsers = this.userStore.users;
@@ -97,6 +99,11 @@ export class CreateProjectComponent {
       if (this.projectStore.projectCreated()) {
         this._modalRef?.close();
         this.projectStore.resetProjectCreated();
+        this._notification.create(
+          'success',
+          'Created project successfully.',
+          ''
+        );
       }
     });
   }

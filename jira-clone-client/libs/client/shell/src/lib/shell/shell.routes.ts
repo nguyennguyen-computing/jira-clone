@@ -7,18 +7,16 @@ export const shellRoutes: Routes = [
     component: ShellComponent,
     children: [
       {
-        path: 'project/:id',
+        path: 'board/:id',
         loadComponent: () =>
-          import('@jira-clone/project').then(
-            (m) => m.ProjectComponent
+          import('@jira-clone/kanban-board').then(
+            (m) => m.KanbanBoardComponent
           ),
       },
       {
         path: 'home',
         loadComponent: () =>
-          import('@jira-clone/home').then(
-            (m) => m.HomeComponent
-          ),
+          import('@jira-clone/home').then((m) => m.HomeComponent),
       },
       {
         path: '**',

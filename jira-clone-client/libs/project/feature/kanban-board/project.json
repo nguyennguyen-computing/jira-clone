@@ -1,7 +1,7 @@
 {
-  "name": "project",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/project/src",
+  "name": "kanban-board",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/project/feature/kanban-board/src",
   "prefix": "lib",
   "projectType": "library",
   "tags": [],
@@ -10,7 +10,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/project/jest.config.ts"
+        "jestConfig": "libs/project/feature/kanban-board/jest.config.ts"
       }
     },
     "lint": {

@@ -147,7 +147,7 @@ export class HomeComponent {
   }
 
   goToProject(projectId: string): void {
-    this.router.navigate(['/project', projectId]);
+    this.router.navigate(['/board', projectId]);
   }
 
   openCreateProjectModal(): void {

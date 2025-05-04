@@ -1,8 +1,8 @@
 export default {
-  displayName: 'project',
-  preset: '../../jest.preset.js',
+  displayName: 'project-data-access',
+  preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/libs/project',
+  coverageDirectory: '../../../coverage/libs/project/data-access',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

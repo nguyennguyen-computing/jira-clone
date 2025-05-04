@@ -1,0 +1,44 @@
+{
+  "name": "data-access",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "data-access/src",
+  "prefix": "lib",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "options": {
+        "project": "data-access/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "data-access/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "data-access/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "tsConfig": "data-access/tsconfig.spec.json",
+        "polyfills": [
+          "zone.js",
+          "zone.js/testing"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@angular-eslint/builder:lint",
+      "options": {
+        "lintFilePatterns": [
+          "data-access/**/*.ts",
+          "data-access/**/*.html"
+        ],
+        "eslintConfig": "data-access/eslint.config.mjs"
+      }
+    }
+  }
+}
