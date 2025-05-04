@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SideBarLink } from '../../models/sidebar-link.interface';
 import { SideBarLinks } from '../../models/sidebar-link.const';
-import { SvgIconComponent } from '@jira-clone/svg-icon';
+import { AvatarComponent, SvgIconComponent } from '@jira-clone/svg-icon';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, RouterModule, SvgIconComponent],
+  imports: [CommonModule, RouterModule, SvgIconComponent, AvatarComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })
@@ -21,7 +21,6 @@ export class SidebarComponent {
   constructor() {}
 
   ngOnInit(): void {
-    // Initialize sideBarLinks
     this.sideBarLinks = SideBarLinks;
   }
 }

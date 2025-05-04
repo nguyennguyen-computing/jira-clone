@@ -25,7 +25,12 @@
         "libs/home/feature/create-project/src/index.ts"
       ],
       "@jira-clone/http-client": ["libs/core/http-client/src/index.ts"],
-      "@jira-clone/project": ["libs/project/src/index.ts"],
+      "@jira-clone/kanban-board": [
+        "libs/project/feature/kanban-board/src/index.ts"
+      ],
+      "@jira-clone/project-data-access": [
+        "libs/project/data-access/src/index.ts"
+      ],
       "@jira-clone/shell": ["libs/client/shell/src/index.ts"],
       "@jira-clone/svg-icon": ["libs/ui/components/svg-icon/src/index.ts"],
       "@jira-clone/token-interceptor": [

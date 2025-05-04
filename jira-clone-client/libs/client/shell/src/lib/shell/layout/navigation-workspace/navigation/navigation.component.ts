@@ -23,7 +23,7 @@ export class NavigationComponent {
   private router = inject(Router);
 
   get isShowSideBar(): boolean {
-    return this.router.url.includes('/project');
+    return this.router.url.includes('/board');
   }
 
   toggle() {
