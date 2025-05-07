@@ -50,7 +50,11 @@ export class ProjectsService {
   }
 
   async findOne(id: string): Promise<Project | null> {
-    return this.projectModel.findOne({ id }).populate('users issues').exec();
+    const project = await this.projectModel
+      .findOne({ _id: id })
+      .populate('users issues')
+      .exec();
+    return project;
   }
 
   async update(
