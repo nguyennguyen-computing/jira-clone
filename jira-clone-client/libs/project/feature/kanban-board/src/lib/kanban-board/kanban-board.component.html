@@ -1,4 +1,23 @@
 <div class="flex flex-col w-full h-full py-8 pl-8 pr-6">
-    <lib-breadcrumbs [items]="breadcrumbs"></lib-breadcrumbs>
+  <lib-breadcrumbs [items]="breadcrumbs"></lib-breadcrumbs>
+  <header class="flex justify-between mt-3 text-textDarkest">
+    <div class="text-2xl font-medium">Kanban board</div>
+    <div class="social-links">
+      <a
+        href="https://github.com/nguyennguyen-computing/jira-clone"
+        target="_blank"
+        rel="noopener"
+      >
+        <j-button className="btn-secondary" icon="github"
+          >Source Code
+        </j-button>
+      </a>
+    </div>
+  </header>
+  <lib-filter-board></lib-filter-board>
+  <div class="flex container mt-7" cdkDropListGroup>
+    @for (status of issueStatuses(); track status) {
+    <div board-dnd-list [status]="status" class="board-dnd-list"></div>
+    }
   </div>
-  
+</div>

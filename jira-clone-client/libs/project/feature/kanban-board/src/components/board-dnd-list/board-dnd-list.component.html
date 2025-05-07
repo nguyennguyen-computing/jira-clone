@@ -1,0 +1,7 @@
+<div class="status-list">
+  <div class="px-3 pb-4 pt-3 uppercase text-textMedium text-13 truncate">
+    {{ IssueStatusDisplay[status() || IssueStatus.BACKLOG] }}
+    <!-- <span class="lowercase text-13">{{ issuesCount }}</span> -->
+  </div>
+  <div class="h-full pl-2" cdkDropList></div>
+</div>

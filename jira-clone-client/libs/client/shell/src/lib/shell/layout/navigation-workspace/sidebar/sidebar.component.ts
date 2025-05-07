@@ -10,6 +10,7 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { SideBarLink } from '../../models/sidebar-link.interface';
 import { SideBarLinks } from '../../models/sidebar-link.const';
 import { AvatarComponent, SvgIconComponent } from '@jira-clone/svg-icon';
+import { ProjectDetailStore } from '@jira-clone/project-data-access';
 
 @Component({
   selector: 'app-sidebar',
@@ -27,8 +28,8 @@ import { AvatarComponent, SvgIconComponent } from '@jira-clone/svg-icon';
             title="Angular Vietnam"
           ></lib-avatar>
           <div class="pl-2">
-            <div class="font-medium text-textDark text-15">Project 123</div>
-            <div class="text-textMedium text-13">Software Project</div>
+            <div class="font-medium text-textDark text-15">{{currentProject()?.name}}</div>
+            <div class="text-textMedium text-13">{{currentProject()?.category}}</div>
           </div>
         </div>
 
@@ -66,6 +67,9 @@ import { AvatarComponent, SvgIconComponent } from '@jira-clone/svg-icon';
 })
 export class SidebarComponent {
   private readonly route = inject(ActivatedRoute);
+  private readonly projectDetailStore = inject(ProjectDetailStore);
+
+  readonly currentProject = this.projectDetailStore.project;
 
   expanded = input.required<boolean>();
 
