@@ -1,0 +1,1 @@
+export * from './lib/issue-detail/issue-detail.component';
