@@ -28,8 +28,12 @@ import { ProjectDetailStore } from '@jira-clone/project-data-access';
             title="Angular Vietnam"
           ></lib-avatar>
           <div class="pl-2">
-            <div class="font-medium text-textDark text-15">{{currentProject()?.name}}</div>
-            <div class="text-textMedium text-13">{{currentProject()?.category}}</div>
+            <div class="font-medium text-textDark text-15">
+              {{ currentProject()?.name }}
+            </div>
+            <div class="text-textMedium text-13">
+              {{ currentProject()?.category }}
+            </div>
           </div>
         </div>
 
