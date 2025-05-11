@@ -63,7 +63,7 @@ export const AuthStore = signalStore(
                       id: response.id,
                       email: response.email,
                       name: response.name,
-                      avartarUrl: response.avatarUrl,
+                      avatarUrl: response.avatarUrl,
                     },
 
                     loading: false,

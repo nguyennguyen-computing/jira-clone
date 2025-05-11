@@ -1,6 +1,13 @@
 @if(user(); as user) {
 <div class="flex items-center">
-  <lib-avatar [avatarUrl]="user.avartarUrl || ''" [size]="20"> </lib-avatar>
+  <lib-avatar
+    [avatarUrl]="
+      user.avatarUrl ||
+      'https://res.cloudinary.com/dvujyxh7e/image/upload/c_scale,w_48/v1592405732/ironman_c3jrbc.jpg'
+    "
+    [size]="20"
+  >
+  </lib-avatar>
   <span class="ml-1-5 mr-1-5 user-name">
     {{ user.name }}
   </span>
