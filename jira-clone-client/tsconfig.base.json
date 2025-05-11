@@ -29,6 +29,7 @@
         "libs/home/feature/create-project/src/index.ts"
       ],
       "@jira-clone/http-client": ["libs/core/http-client/src/index.ts"],
+      "@jira-clone/interface": ["libs/core/interface/src/index.ts"],
       "@jira-clone/issue-detail": [
         "libs/issue/feature/issue-detail/src/index.ts"
       ],
@@ -42,7 +43,8 @@
       "@jira-clone/svg-icon": ["libs/ui/components/svg-icon/src/index.ts"],
       "@jira-clone/token-interceptor": [
         "libs/core/token-interceptor/src/index.ts"
-      ]
+      ],
+      "@jira-clone/util": ["libs/core/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

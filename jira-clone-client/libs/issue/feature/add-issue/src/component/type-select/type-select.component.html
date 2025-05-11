@@ -1,0 +1,28 @@
+<nz-select
+  class="w-full"
+  [formControl]="control()"
+  [nzCustomTemplate]="defaultTemplate"
+>
+  @for (type of issueTypes(); track type.value) {
+  <nz-option [nzValue]="type.value" nzCustomContent>
+    <div class="flex items-center">
+      <lib-svg-icon [name]="type.icon" [size]="20"></lib-svg-icon>
+      <span class="ml-3 font-semibold uppercase text-textMedium text-13">{{
+        type.value
+      }}</span>
+    </div>
+  </nz-option>
+  }
+</nz-select>
+
+<ng-template #defaultTemplate let-selected>
+  <div class="flex items-center">
+    <lib-svg-icon
+      [name]="getIssueTypeIcon(selected.nzValue)"
+      [size]="20"
+    ></lib-svg-icon>
+    <span class="ml-3 font-semibold uppercase text-textMedium text-13">{{
+      selected.nzValue
+    }}</span>
+  </div>
+</ng-template>

@@ -17,5 +17,5 @@ export class ButtonComponent {
   iconSize = input<number>(18);
   isWorking = input<boolean>(false);
   isActive = input<boolean>(false);
-  disabled = input<boolean>(false);
+  disabled = input<boolean | undefined>(false);
 }
