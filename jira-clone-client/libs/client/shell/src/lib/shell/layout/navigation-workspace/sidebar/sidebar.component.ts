@@ -11,6 +11,8 @@ import { SideBarLink } from '../../models/sidebar-link.interface';
 import { SideBarLinks } from '../../models/sidebar-link.const';
 import { AvatarComponent, SvgIconComponent } from '@jira-clone/svg-icon';
 import { ProjectDetailStore } from '@jira-clone/project-data-access';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { AddIssueComponent } from '@jira-clone/add-issue'; // Adjust the path as needed
 
 @Component({
   selector: 'app-sidebar',
@@ -51,6 +53,15 @@ import { ProjectDetailStore } from '@jira-clone/project-data-access';
           ></lib-svg-icon>
           <div class="pt-px text-15">{{ link.name }}</div>
         </a>
+        } @else if(link?.action) {
+        <a (click)="executeAction(link.action || '')" class="link allowed">
+          <lib-svg-icon
+            class="mr-4"
+            [name]="link.icon"
+            [size]="24"
+          ></lib-svg-icon>
+          <div class="pt-px text-15">{{ link.name }}</div>
+        </a>
         } @else {
         <div class="link not-allowed">
           <lib-svg-icon
@@ -81,10 +92,28 @@ export class SidebarComponent {
   sideBarLinks = signal<SideBarLink[]>(SideBarLinks);
   projectId = signal<string>('');
 
-  constructor() {
+  constructor(private _modalService: NzModalService) {
     effect(() => {
       const params = this.route.firstChild?.snapshot.paramMap;
       this.projectId.set(params?.get('id') || '');
     });
+  }
+
+  executeAction(action: string) {
+    if (!action) {
+      return;
+    }
+    switch (action) {
+      case 'CREATE_ISSUE':
+        this._modalService.create({
+          nzContent: AddIssueComponent,
+          nzClosable: false,
+          nzFooter: null,
+          nzWidth: 640,
+        });
+        break;
+      default:
+        console.log('Unknown action');
+    }
   }
 }
