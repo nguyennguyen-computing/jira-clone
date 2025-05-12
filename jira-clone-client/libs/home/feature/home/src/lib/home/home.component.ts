@@ -94,9 +94,8 @@ export class HomeComponent {
     const colors: { [key: string]: string } = {
       Critical: 'red',
       High: 'volcano',
-      'Upper Medium': 'orange',
       Medium: 'gold',
-      'Lower Medium': 'blue',
+      'Lower': 'blue',
     };
     return colors[priority] || 'default';
   }
@@ -105,9 +104,8 @@ export class HomeComponent {
     const icons: { [key: string]: string } = {
       Critical: 'arrow-up',
       High: 'arrow-up',
-      'Upper Medium': 'arrow-up',
       Medium: 'minus',
-      'Lower Medium': 'arrow-down',
+      'Lower': 'arrow-down',
     };
     return icons[priority] || '';
   }

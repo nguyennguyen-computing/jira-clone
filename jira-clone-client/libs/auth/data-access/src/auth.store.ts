@@ -60,10 +60,10 @@ export const AuthStore = signalStore(
                 next: (response: RegisterResponse) => {
                   patchState(store, {
                     user: {
-                      id: response.id,
+                      _id: response.id,
                       email: response.email,
                       name: response.name,
-                      avartarUrl: response.avatarUrl,
+                      avatarUrl: response.avatarUrl,
                     },
 
                     loading: false,

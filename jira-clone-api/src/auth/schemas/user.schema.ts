@@ -3,19 +3,19 @@ import { Document, Types } from 'mongoose';
 
 @Schema()
 export class User extends Document {
-  @Prop({ required: true, unique: true })
-  declare id: string;
-
   @Prop({ required: true })
   name: string;
 
-  @Prop({default: 'https://res.cloudinary.com/dvujyxh7e/image/upload/c_scale,w_48/v1592405732/ironman_c3jrbc.jpg'})
+  @Prop({
+    default:
+      'https://res.cloudinary.com/dvujyxh7e/image/upload/c_scale,w_48/v1592405732/ironman_c3jrbc.jpg',
+  })
   avatarUrl: string;
 
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true})
   password: string;
 }
 

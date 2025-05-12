@@ -7,10 +7,10 @@
   nzServerSearch="true"
   (nzOnSearch)="searchUsers($event)"
 >
-  @for (user of users(); track user.id) {
+  @for (user of users(); track user._id) {
   <nz-option
     nzCustomContent
-    [nzValue]="user.id"
+    [nzValue]="user._id"
   >
     <lib-user-component [user]="user"></lib-user-component>
   </nz-option>

@@ -11,10 +11,12 @@ import { tapResponse } from '@ngrx/operators';
 import { pipe, switchMap, tap } from 'rxjs';
 import { Project } from './project.model';
 import { ProjectDetailService } from './services/project-detail.service';
+import { User } from '@jira-clone/interface';
 
 // Define the state interface
 interface ProjectState {
   project: Project | null;
+  usersInProject: User[];
   loading: boolean;
   error: string | null;
 }
@@ -22,6 +24,7 @@ interface ProjectState {
 // Initial state
 const initialState: ProjectState = {
   project: null,
+  usersInProject: [],
   loading: false,
   error: null,
 };
@@ -29,32 +32,44 @@ const initialState: ProjectState = {
 export const ProjectDetailStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withMethods(
-    (
-      store,
-      projectDetailService = inject(ProjectDetailService)
-    ) => ({
-      fetchProject: rxMethod<string>(
-        pipe(
-          tap((id) => patchState(store, { loading: true, error: null })),
-          switchMap((id) =>
-            projectDetailService.getProject(id).pipe(
-              tapResponse({
-                next: (project) =>{
-                  patchState(store, { project, loading: false })
-                  console.log('Project:', project);
-                }
-                  ,
-                error: (error: any) =>
-                  patchState(store, {
-                    error: error.message || 'Failed to fetch project',
-                    loading: false,
-                  }),
-              })
-            )
+  withMethods((store, projectDetailService = inject(ProjectDetailService)) => ({
+    fetchProject: rxMethod<string>(
+      pipe(
+        tap((id) => patchState(store, { loading: true, error: null })),
+        switchMap((id) =>
+          projectDetailService.getProject(id).pipe(
+            tapResponse({
+              next: (project) => {
+                patchState(store, { project, loading: false });
+              },
+              error: (error: any) =>
+                patchState(store, {
+                  error: error.message || 'Failed to fetch project',
+                  loading: false,
+                }),
+            })
           )
         )
-      ),
-    })
-  ),
+      )
+    ),
+    getUserInProject: rxMethod<string>(
+      pipe(
+        tap((id) => patchState(store, { loading: true, error: null })),
+        switchMap((id) =>
+          projectDetailService.getUserInProject(id).pipe(
+            tapResponse({
+              next: (usersInProject) => {
+                patchState(store, { usersInProject, loading: false });
+              },
+              error: (error: any) =>
+                patchState(store, {
+                  error: error.message || 'Failed to fetch users in project',
+                  loading: false,
+                }),
+            })
+          )
+        )
+      )
+    ),
+  }))
 );

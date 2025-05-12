@@ -4,9 +4,6 @@ import { Project } from '../../projects/schemas/project.schema';
 
 @Schema({ timestamps: true })
 export class Issue extends Document {
-  @Prop({ required: true, unique: true })
-  declare id: string;
-
   @Prop({ required: true })
   title: string;
 
@@ -19,7 +16,10 @@ export class Issue extends Document {
   @Prop({ enum: ['Backlog', 'Selected', 'InProgress', 'Done'], required: true })
   status: string;
 
-  @Prop({ enum: ['Lowest', 'Low', 'Medium', 'High', 'Highest'], required: true })
+  @Prop({
+    enum: ['Lowest', 'Low', 'Medium', 'High', 'Highest'],
+    required: true,
+  })
   priority: string;
 
   @Prop({ default: 1 })
@@ -36,3 +36,19 @@ export class Issue extends Document {
 }
 
 export const IssueSchema = SchemaFactory.createForClass(Issue);
+
+IssueSchema.pre<Issue>('save', async function (next) {
+  if (!this.isNew) {
+    return next();
+  }
+
+  const model = this.constructor as any;
+  const lastIssue = await model
+    .findOne({ projectId: this.projectId })
+    .sort({ listPosition: -1 })
+    .exec();
+  console.log('lastIssue', lastIssue);
+
+  this.listPosition = lastIssue ? lastIssue.listPosition + 1 : 1;
+  next();
+});

@@ -32,7 +32,6 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new this.userModel({
-      id: new Types.ObjectId().toString(),
       email,
       password: hashedPassword,
       name: username,
@@ -57,12 +56,7 @@ export class AuthService {
     const token = this.jwtService.sign(payload);
 
     return {
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        avartarUrl: user.avatarUrl,
-      },
+      user: user,
       token,
     };
   }

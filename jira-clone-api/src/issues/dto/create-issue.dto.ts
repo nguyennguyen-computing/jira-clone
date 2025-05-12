@@ -3,13 +3,9 @@ import {
   IsEnum,
   IsOptional,
   IsArray,
-  IsNumber,
 } from 'class-validator';
 
 export class CreateIssueDto {
-  @IsString()
-  id: string;
-
   @IsString()
   title: string;
 
@@ -23,12 +19,8 @@ export class CreateIssueDto {
   @IsEnum(['Backlog', 'Selected', 'InProgress', 'Done'])
   status: string;
 
-  @IsEnum(['Lowest', 'Low', 'Medium', 'High', 'Highest'])
+  @IsEnum(['Critical', 'High', 'Medium', 'Lower'])
   priority: string;
-
-  @IsNumber()
-  @IsOptional()
-  listPosition?: number;
 
   @IsString()
   projectId: string;
