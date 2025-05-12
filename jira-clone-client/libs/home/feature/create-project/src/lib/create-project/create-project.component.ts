@@ -115,7 +115,7 @@ export class CreateProjectComponent {
   handleSubmit(): void {
     if (this.projectForm.valid) {
       const users = this.projectForm.value.users;
-      users.push(this.authStore.currentUser()?.id);
+      users.push(this.authStore.currentUser()?._id);
       const projectData = {
         ...this.projectForm.value,
         endDate: format(new Date(this.projectForm.value.endDate), 'dd/MM/yyyy'),

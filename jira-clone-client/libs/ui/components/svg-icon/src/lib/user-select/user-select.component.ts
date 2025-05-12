@@ -44,6 +44,6 @@ export class UserSelectComponent {
   }
 
   getUser(userId: string): User | undefined {
-    return this.users().find((user) => user.id === userId);
+    return this.users().find((user) => user._id === userId);
   }
 }

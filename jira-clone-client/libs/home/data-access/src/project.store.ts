@@ -70,7 +70,7 @@ export const ProjectStore = signalStore(
           switchMap(({ page, limit, name, status }) =>
             projectsService
               .getProjects(
-                authStore.currentUser()?.id || '',
+                authStore.currentUser()?._id || '',
                 page,
                 limit,
                 name,

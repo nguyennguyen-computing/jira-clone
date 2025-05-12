@@ -1,4 +1,6 @@
+import { User } from "../schemas/user.schema";
+
 export interface LoginResponse {
-  user: { id: string; email: string; name: string; avatarUrl?: string };
+  user: User;
   token: string;
 }

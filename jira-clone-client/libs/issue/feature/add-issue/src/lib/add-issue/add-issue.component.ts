@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ButtonComponent,
@@ -6,6 +6,7 @@ import {
   UserSelectComponent,
 } from '@jira-clone/svg-icon';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import {
   FormBuilder,
   FormControl,
@@ -13,12 +14,18 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { IssuePriority, IssueType, User } from '@jira-clone/interface';
+import {
+  IssuePriority,
+  IssueStatus,
+  IssueType,
+  User,
+} from '@jira-clone/interface';
 import { quillConfiguration } from '@jira-clone/config';
 import { TypeSelectComponent } from '../../component/type-select/type-select.component';
 import { QuillModule } from 'ngx-quill';
 import { AssigneesSelectComponent } from '../../component/assignees-select/assignees-select.component';
-import { UserStore } from '@jira-clone/home-data-access';
+import { ProjectDetailStore } from '@jira-clone/project-data-access';
+import { IssueStore } from '@jira-clone/issue-data-access';
 
 @Component({
   selector: 'lib-add-issue',
@@ -36,10 +43,13 @@ import { UserStore } from '@jira-clone/home-data-access';
   styleUrl: './add-issue.component.scss',
 })
 export class AddIssueComponent {
+  private readonly _modalRef = inject(NzModalRef);
+  private readonly _notification = inject(NzNotificationService);
   private fb = inject(FormBuilder);
   private modalRef = inject(NzModalRef);
-  private readonly userStore = inject(UserStore);
-  readonly users = this.userStore.users;
+  private readonly projectStore = inject(ProjectDetailStore);
+  private readonly issueStore = inject(IssueStore);
+  readonly usersInProject = this.projectStore.usersInProject;
 
   isVisible = signal(true);
   issueForm!: FormGroup;
@@ -64,24 +74,41 @@ export class AddIssueComponent {
     return this.issueForm.get('reporterId') as FormControl;
   }
 
+  get userIds(): FormControl {
+    return this.issueForm.get('userIds') as FormControl;
+  }
+
   constructor() {
     this.initForm();
+    this.projectStore.getUserInProject(
+      this.projectStore.project()?._id as string
+    );
 
-    effect(() => {});
+    effect(() => {
+      if (this.issueStore.issueCreated()) {
+        this._modalRef?.close();
+        this.issueStore.resetIssueCreated();
+        this._notification.create('success', 'Created issue successfully.', '');
+      }
+    });
   }
 
   initForm() {
     this.issueForm = this.fb.group({
       type: [IssueType.TASK, Validators.required],
       priority: [IssuePriority.MEDIUM, Validators.required],
+      status: [IssueStatus.BACKLOG, Validators.required],
       title: ['', [Validators.required]],
+      projectId: [this.projectStore.project()?._id, Validators.required],
       description: [''],
       reporterId: [''],
       userIds: [[]],
     });
   }
 
-  submitForm() {}
+  submitForm() {
+    this.issueStore.createIssue(this.issueForm.value);
+  }
 
   cancel() {
     this.closeModal();

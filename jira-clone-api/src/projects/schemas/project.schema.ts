@@ -18,8 +18,8 @@ export class Project extends Document {
   @Prop()
   category?: string;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] }) // Array of user IDs
-  users?: Types.ObjectId[];
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
+  users: Types.ObjectId[];
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Issue' }] }) // Array of issue IDs
   issues?: Types.ObjectId[];

@@ -64,4 +64,9 @@ export class ProjectsController {
   async getIssuesInProject(@Param('projectId') projectId: string) {
     return this.projectsService.getIssuesInProject(projectId);
   }
+
+  @Get(':projectId/users')
+  async getUsersInProject(@Param('projectId') projectId: string) {
+    return this.projectsService.getUsersInProject(projectId);
+  }
 }

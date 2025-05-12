@@ -17,6 +17,6 @@ export class JComment {
     this.createdAt = now.toISOString();
     this.updatedAt = now.toISOString();
     this.body = '';
-    this.userId = user.id;
+    this.userId = user._id;
   }
 }

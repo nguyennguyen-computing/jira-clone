@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { Project } from './schemas/project.schema';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { User } from 'src/auth/schemas/user.schema';
 
 @Injectable()
 export class ProjectsService {
@@ -92,5 +93,26 @@ export class ProjectsService {
     }
 
     return project.issues || [];
+  }
+
+  async getUsersInProject(projectId: string): Promise<any[]> {
+    console.log('getUsersInProject', projectId);
+    const project = await this.projectModel
+      .findById(projectId)
+      .populate({
+        path: 'users',
+        select: '-password',
+      })
+      .exec();
+    console.log(
+      'Project before populate:',
+      await this.projectModel.findById(projectId).exec(),
+    );
+    console.log('Project after populate:', project);
+    if (!project) {
+      throw new BadRequestException('Project not found');
+    }
+
+    return project.users || [];
   }
 }
