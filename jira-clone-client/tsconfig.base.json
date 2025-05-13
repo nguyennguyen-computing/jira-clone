@@ -20,9 +20,6 @@
       "@jira-clone/auth-guard": ["libs/core/guards/auth-guard/src/index.ts"],
       "@jira-clone/auth/data-access": ["libs/auth/data-access/src/index.ts"],
       "@jira-clone/config": ["libs/core/config/src/index.ts"],
-      "@jira-clone/issue-data-access": [
-        "libs/issue/data-access/data-access/src/index.ts"
-      ],
       "@jira-clone/home": ["libs/home/feature/home/src/index.ts"],
       "@jira-clone/home-data-access": ["libs/home/data-access/src/index.ts"],
       "@jira-clone/home/create-project": [
@@ -30,6 +27,9 @@
       ],
       "@jira-clone/http-client": ["libs/core/http-client/src/index.ts"],
       "@jira-clone/interface": ["libs/core/interface/src/index.ts"],
+      "@jira-clone/issue-data-access": [
+        "libs/issue/data-access/data-access/src/index.ts"
+      ],
       "@jira-clone/issue-detail": [
         "libs/issue/feature/issue-detail/src/index.ts"
       ],

@@ -17,7 +17,12 @@
   <lib-filter-board></lib-filter-board>
   <div class="flex container mt-7" cdkDropListGroup>
     @for (status of issueStatuses(); track status) {
-    <div board-dnd-list [status]="status" class="board-dnd-list"></div>
+    <div
+      board-dnd-list
+      [issues]="projectDetailStore.getIssuesByStatus(status)()"
+      [status]="status"
+      class="board-dnd-list"
+    ></div>
     }
   </div>
 </div>

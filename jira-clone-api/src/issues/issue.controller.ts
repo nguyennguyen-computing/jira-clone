@@ -20,4 +20,9 @@ export class IssuesController {
   async findOne(@Param('id') id: string) {
     return this.issuesService.findOne(id);
   }
+
+  @Get('project/:projectId')
+  async findByProjectId(@Param('projectId') projectId: string) {
+    return this.issuesService.findByProjectId(projectId);
+  }
 }

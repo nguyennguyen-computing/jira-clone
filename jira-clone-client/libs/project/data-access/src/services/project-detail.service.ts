@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { ApiService } from '@jira-clone/http-client';
 import { HttpParams } from '@angular/common/http';
 import { Project } from '../project.model';
-import { User } from '@jira-clone/interface';
+import { IssueCreate, User } from '@jira-clone/interface';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectDetailService {
@@ -16,5 +16,9 @@ export class ProjectDetailService {
 
   getUserInProject(id: string): Observable<User[]> {
     return this.apiService.get<User[]>(`/projects/${id}/users`);
+  }
+
+  getIssuesByProjectId(id: string): Observable<IssueCreate[]> {
+    return this.apiService.get(`/issues/project/${id}`);
   }
 }

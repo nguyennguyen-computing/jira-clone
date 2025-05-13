@@ -1,4 +1,5 @@
 export interface IssueCreate {
+  _id?: string;
   title: string;
   description: string;
   type: string;

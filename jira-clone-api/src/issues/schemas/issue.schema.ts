@@ -17,7 +17,7 @@ export class Issue extends Document {
   status: string;
 
   @Prop({
-    enum: ['Lowest', 'Low', 'Medium', 'High', 'Highest'],
+    enum: ['Lower', 'Low', 'Medium', 'High', 'Highest'],
     required: true,
   })
   priority: string;

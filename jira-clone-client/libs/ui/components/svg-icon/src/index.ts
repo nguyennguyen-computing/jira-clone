@@ -6,3 +6,4 @@ export * from './lib/priority-select/priority-select.component';
 export * from './lib/user-select/user-select.component';
 export * from './lib/breadcrumbs/breadcrumbs.component';
 export * from './lib/j-input/j-input.component';
+export * from './lib/issue-card/issue-card.component';

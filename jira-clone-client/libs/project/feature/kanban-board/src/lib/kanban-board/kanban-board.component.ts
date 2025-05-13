@@ -5,7 +5,10 @@ import { IssueStatus } from '../../models';
 import { BreadcrumbsComponent, ButtonComponent } from '@jira-clone/svg-icon';
 import { FilterBoardComponent } from '../../components/filter-board/filter-board.component';
 import { BoardDndListComponent } from '../../components/board-dnd-list/board-dnd-list.component';
-import { ProjectDetailService, ProjectDetailStore } from '@jira-clone/project-data-access';
+import {
+  ProjectDetailService,
+  ProjectDetailStore,
+} from '@jira-clone/project-data-access';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -23,10 +26,11 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./kanban-board.component.scss'],
 })
 export class KanbanBoardComponent {
-  private readonly projectDetailStore = inject(ProjectDetailStore);
-  private readonly route = inject(ActivatedRoute);
+  readonly projectDetailStore = inject(ProjectDetailStore);
 
   breadcrumbs: string[] = ['Projects', 'Angular Jira Clone', 'Kanban Board'];
+
+  private readonly route = inject(ActivatedRoute);
 
   issueStatuses = signal<IssueStatus[]>([
     IssueStatus.BACKLOG,
@@ -35,10 +39,14 @@ export class KanbanBoardComponent {
     IssueStatus.DONE,
   ]);
 
+  get issues$() {
+    return this.projectDetailStore.issues;
+  }
+
   constructor() {
-    console.log('Project ID:', this.route.snapshot.paramMap.get('id'));
-    this.projectDetailStore.fetchProject(
-      this.route.snapshot.paramMap.get('id') || ''
-    );
+    const projectId = this.route.snapshot.paramMap.get('id') || '';
+    this.projectDetailStore.fetchProject(projectId);
+
+    this.projectDetailStore.getIssuesByProjectId(projectId);
   }
 }
