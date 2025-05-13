@@ -26,4 +26,11 @@ export class IssuesService {
       .populate('projectId reporterId userIds')
       .exec();
   }
+
+  async findByProjectId(projectId: string): Promise<Issue[]> {
+    return this.issueModel
+      .find({ projectId })
+      .populate('projectId reporterId userIds')
+      .exec();
+  }
 }

@@ -20,7 +20,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     NzIconModule,
     AvatarComponent,
     NzButtonModule,
-],
+  ],
   providers: [NzDrawerService, NzModalService],
   templateUrl: './navbar-left.component.html',
   styleUrl: './navbar-left.component.scss',
@@ -30,7 +30,7 @@ export class NavbarLeftComponent {
 
   currentUser = this.authStore.currentUser;
   items: NavItem[] = [];
-  isCreateProjectModalVisible = false
+  isCreateProjectModalVisible = false;
 
   constructor(
     private _drawerService: NzDrawerService,
