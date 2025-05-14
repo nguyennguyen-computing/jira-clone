@@ -1,11 +1,5 @@
 import { inject, Signal } from '@angular/core';
-import {
-  signalStore,
-  withState,
-  withMethods,
-  withComputed,
-  patchState,
-} from '@ngrx/signals';
+import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
 import { computed } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
@@ -14,7 +8,6 @@ import { Project } from './project.model';
 import { ProjectDetailService } from './services/project-detail.service';
 import { IssueCreate, User } from '@jira-clone/interface';
 
-// Define the state interface
 interface ProjectState {
   project: Project | null;
   usersInProject: User[];
@@ -23,7 +16,6 @@ interface ProjectState {
   error: string | null;
 }
 
-// Initial state
 const initialState: ProjectState = {
   project: null,
   usersInProject: [],
@@ -35,66 +27,101 @@ const initialState: ProjectState = {
 export const ProjectDetailStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withMethods((store, projectDetailService = inject(ProjectDetailService)) => ({
-    fetchProject: rxMethod<string>(
-      pipe(
-        tap((id) => patchState(store, { loading: true, error: null })),
-        switchMap((id) =>
-          projectDetailService.getProject(id).pipe(
-            tapResponse({
-              next: (project) => {
-                patchState(store, { project, loading: false });
-              },
-              error: (error: any) =>
-                patchState(store, {
-                  error: error.message || 'Failed to fetch project',
-                  loading: false,
-                }),
-            })
+  withMethods((store, projectDetailService = inject(ProjectDetailService)) => {
+    return {
+      fetchProject: rxMethod<string>(
+        pipe(
+          tap((id) => patchState(store, { loading: true, error: null })),
+          switchMap((id) =>
+            projectDetailService.getProject(id).pipe(
+              tapResponse({
+                next: (project) => {
+                  patchState(store, { project, loading: false });
+                },
+                error: (error: any) =>
+                  patchState(store, {
+                    error: error.message || 'Failed to fetch project',
+                    loading: false,
+                  }),
+              })
+            )
           )
         )
-      )
-    ),
-    getUserInProject: rxMethod<string>(
-      pipe(
-        tap((id) => patchState(store, { loading: true, error: null })),
-        switchMap((id) =>
-          projectDetailService.getUserInProject(id).pipe(
-            tapResponse({
-              next: (usersInProject) => {
-                patchState(store, { usersInProject, loading: false });
-              },
-              error: (error: any) =>
-                patchState(store, {
-                  error: error.message || 'Failed to fetch users in project',
-                  loading: false,
-                }),
-            })
+      ),
+      getUserInProject: rxMethod<string>(
+        pipe(
+          tap((id) => patchState(store, { loading: true, error: null })),
+          switchMap((id) =>
+            projectDetailService.getUserInProject(id).pipe(
+              tapResponse({
+                next: (usersInProject) => {
+                  patchState(store, { usersInProject, loading: false });
+                },
+                error: (error: any) =>
+                  patchState(store, {
+                    error: error.message || 'Failed to fetch users in project',
+                    loading: false,
+                  }),
+              })
+            )
           )
         )
-      )
-    ),
-    getIssuesByProjectId: rxMethod<string>(
-      pipe(
-        tap((id) => patchState(store, { loading: true, error: null })),
-        switchMap((id) =>
-          projectDetailService.getIssuesByProjectId(id).pipe(
-            tapResponse({
-              next: (issues) => {
-                patchState(store, { issues, loading: false });
-              },
-              error: (error: any) =>
-                patchState(store, {
-                  error: error.message || 'Failed to fetch issues',
-                  loading: false,
-                }),
-            })
+      ),
+      getIssuesByProjectId: rxMethod<string>(
+        pipe(
+          tap((id) => patchState(store, { loading: true, error: null })),
+          switchMap((id) =>
+            projectDetailService.getIssuesByProjectId(id).pipe(
+              tapResponse({
+                next: (issues) => {
+                  patchState(store, { issues, loading: false });
+                },
+                error: (error: any) =>
+                  patchState(store, {
+                    error: error.message || 'Failed to fetch issues',
+                    loading: false,
+                  }),
+              })
+            )
           )
         )
-      )
-    ),
-    getIssuesByStatus(status: string): Signal<IssueCreate[]> {
-      return computed(() => store.issues().filter((issue) => issue.status.toLowerCase() === status.toLowerCase()));
-    }
-  }))
+      ),
+      getIssuesByStatus(status: string): Signal<IssueCreate[]> {
+        return computed(() =>
+          store
+            .issues()
+            .filter(
+              (issue) => issue.status.toLowerCase() === status.toLowerCase()
+            )
+        );
+      },
+      updateIssuesOrder(status: string, updatedIssues: IssueCreate[]): void {
+        console.log('updateIssuesOrder', status, updatedIssues);
+        const otherIssues = store
+          .issues()
+          .filter((issue) => issue.status !== status);
+        const newIssues = [...otherIssues, ...updatedIssues];
+        patchState(store, { issues: newIssues });
+      },
+      updateIssuesStatus(status: string, updatedIssues: IssueCreate[]): void {
+        const updatedIssuesWithStatus = updatedIssues.map((issue) => ({
+          ...issue,
+          status,
+        }));
+
+        const otherIssues = store
+          .issues()
+          .filter(
+            (issue) =>
+              !updatedIssues.some(
+                (updatedIssue) => updatedIssue._id === issue._id
+              )
+          );
+
+        const newIssues = [...otherIssues, ...updatedIssuesWithStatus];
+
+        patchState(store, { issues: newIssues });
+      },
+    };
+  })
 );
