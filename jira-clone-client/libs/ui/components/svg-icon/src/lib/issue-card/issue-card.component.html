@@ -4,8 +4,8 @@
       {{ issue().title }}
     </p>
     <div class="flex items-center justify-between">
-      <!-- <div class="flex items-center ml-1">
-        @for (user of assignees(); track user.id) {
+      <div class="flex items-center ml-1">
+        @for (user of assignees(); track user._id) {
         <lib-avatar
           class="shadow-outline-white -ml-1"
           [size]="24"
@@ -18,9 +18,9 @@
         </lib-avatar>
         }
         <span [class.ml-3]="assignees().length" class="uppercase">
-          {{ issue().type }}-{{ issue().id }}
+          {{ issue().type }}
         </span>
-      </div> -->
+      </div>
       <div class="flex items-center">
         <lib-svg-icon
           class="mr-1 text-textMedium"

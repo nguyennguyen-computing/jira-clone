@@ -2,7 +2,7 @@ import { Component, inject, input, OnInit } from '@angular/core';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { IssueStatus, IssueStatusDisplay } from '../../models';
-import { ProjectDetailService } from '@jira-clone/project-data-access';
+import { ProjectDetailService, ProjectDetailStore } from '@jira-clone/project-data-access';
 import { ActivatedRoute } from '@angular/router';
 import { IssueCreate } from '@jira-clone/interface';
 import { IssueCardComponent } from '@jira-clone/svg-icon';
@@ -15,6 +15,8 @@ import { IssueCardComponent } from '@jira-clone/svg-icon';
   styleUrl: './board-dnd-list.component.scss',
 })
 export class BoardDndListComponent {
+  readonly projectDetailStore = inject(ProjectDetailStore);
+  
   status = input<IssueStatus>();
   issues = input<IssueCreate[]>();
 
@@ -28,6 +30,7 @@ export class BoardDndListComponent {
       moveItemInArray(newIssues, event.previousIndex, event.currentIndex);
       console.log(event)
       // this.updateListPosition(newIssues);
+      this.projectDetailStore.updateIssuesOrder(newIssue.status, newIssues);
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -35,10 +38,8 @@ export class BoardDndListComponent {
         event.previousIndex,
         event.currentIndex
       );
-      console.log(event)
-      // this.updateListPosition(newIssues);
       newIssue.status = event.container.id as IssueStatus;
-      // this._projectService.updateIssue(newIssue);
+      this.projectDetailStore.updateIssuesStatus(newIssue.status, newIssues);
     }
   }
 }

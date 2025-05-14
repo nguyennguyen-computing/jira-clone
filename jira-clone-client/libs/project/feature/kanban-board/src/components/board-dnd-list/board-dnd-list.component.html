@@ -10,12 +10,7 @@
     [id]="status() || ''"
     (cdkDropListDropped)="drop($event)"
   >
-    <issue-card
-      *ngFor="let issue of issues()"
-      [issue]="issue"
-      cdkDrag
-      [cdkDragData]="issue"
-    >
-    </issue-card>
+    @for (issue of issues(); track issue._id) {
+    <issue-card [issue]="issue" cdkDrag [cdkDragData]="issue"> </issue-card>}
   </div>
 </div>

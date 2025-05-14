@@ -25,12 +25,12 @@ export class IssueCardComponent {
   private modalService = inject(NzModalService);
 
   // Computed signals for reactive state
-  // assignees = computed(() => {
-  //   const users = this.projectService.users();
-  //   return this.issue()
-  //     .userIds.map((userId) => users.find((user: string) => user.id === userId))
-  //     .filter((user): user is User => !!user);
-  // });
+  assignees = computed(() => {
+    const users = this.issue().userIds;
+    return this.issue()
+      .userIds.map((userId) => users.find((user: User) => user._id === userId._id))
+      .filter((user): user is User => !!user);
+  });
 
   issueTypeIcon = computed(() =>
     IssueUtil.getIssueTypeIcon(this.issue().type as IssueType)

@@ -1,3 +1,5 @@
+import { User } from "./user.interface";
+
 export interface IssueCreate {
   _id?: string;
   title: string;
@@ -8,5 +10,5 @@ export interface IssueCreate {
   listPosition: number;
   projectId: string;
   reporterId: string;
-  userIds: string[];
+  userIds: User[];
 }
