@@ -21,4 +21,8 @@ export class ProjectDetailService {
   getIssuesByProjectId(id: string): Observable<IssueCreate[]> {
     return this.apiService.get(`/issues/project/${id}`);
   }
+
+  updateIssues(updatedIssues: IssueCreate[]): Observable<IssueCreate[]> {
+    return this.apiService.put<IssueCreate[], IssueCreate[]>('/issues/update', updatedIssues);
+  }
 }
