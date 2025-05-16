@@ -28,6 +28,9 @@ export const ProjectDetailStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withMethods((store, projectDetailService = inject(ProjectDetailService)) => {
+    const sortIssues = (issues: IssueCreate[]): IssueCreate[] => {
+      return [...issues].sort((a, b) => a.listPosition - b.listPosition);
+    };
     return {
       fetchProject: rxMethod<string>(
         pipe(
@@ -74,11 +77,31 @@ export const ProjectDetailStore = signalStore(
             projectDetailService.getIssuesByProjectId(id).pipe(
               tapResponse({
                 next: (issues) => {
-                  patchState(store, { issues, loading: false });
+                  issues.sort((a, b) => a.listPosition - b.listPosition);
+                  patchState(store, { issues: sortIssues(issues), loading: false });
                 },
                 error: (error: any) =>
                   patchState(store, {
                     error: error.message || 'Failed to fetch issues',
+                    loading: false,
+                  }),
+              })
+            )
+          )
+        )
+      ),
+      updateIsssues: rxMethod<IssueCreate[]>(
+        pipe(
+          tap((id) => patchState(store, { loading: true, error: null })),
+          switchMap((updatedIssues) =>
+            projectDetailService.updateIssues(updatedIssues).pipe(
+              tapResponse({
+                next: (issues) => {
+                  patchState(store, { issues: sortIssues(issues), loading: false });
+                },
+                error: (error: any) =>
+                  patchState(store, {
+                    error: error.message || 'Failed to update issues',
                     loading: false,
                   }),
               })
@@ -96,7 +119,6 @@ export const ProjectDetailStore = signalStore(
         );
       },
       updateIssuesOrder(status: string, updatedIssues: IssueCreate[]): void {
-        console.log('updateIssuesOrder', status, updatedIssues);
         const otherIssues = store
           .issues()
           .filter((issue) => issue.status !== status);
@@ -120,6 +142,7 @@ export const ProjectDetailStore = signalStore(
 
         const newIssues = [...otherIssues, ...updatedIssuesWithStatus];
 
+        this.updateIsssues(newIssues);
         patchState(store, { issues: newIssues });
       },
     };

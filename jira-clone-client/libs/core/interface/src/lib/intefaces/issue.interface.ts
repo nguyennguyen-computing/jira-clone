@@ -9,6 +9,6 @@ export interface IssueCreate {
   priority: string;
   listPosition: number;
   projectId: string;
-  reporterId: string;
+  reporterId: User;
   userIds: User[];
 }

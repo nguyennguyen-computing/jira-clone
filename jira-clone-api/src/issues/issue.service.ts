@@ -30,7 +30,23 @@ export class IssuesService {
   async findByProjectId(projectId: string): Promise<Issue[]> {
     return this.issueModel
       .find({ projectId })
-      .populate('projectId reporterId userIds')
+      .populate('reporterId userIds')
       .exec();
+  }
+
+  async updateIssues(
+    updatedIssues: { _id: string; status?: string; listPosition?: number }[]
+  ): Promise<Issue[]> {
+    const bulkOperations = updatedIssues.map((issue) => ({
+      updateOne: {
+        filter: { _id: issue._id },
+        update: { $set: { ...issue } },
+      },
+    }));
+  
+    await this.issueModel.bulkWrite(bulkOperations);
+  
+    const updatedIds = updatedIssues.map((issue) => issue._id);
+    return this.issueModel.find({ _id: { $in: updatedIds } }).populate('reporterId userIds').exec();
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put } from '@nestjs/common';
 import { IssuesService } from './issue.service';
 import { CreateIssueDto } from './dto/create-issue.dto';
 
@@ -24,5 +24,13 @@ export class IssuesController {
   @Get('project/:projectId')
   async findByProjectId(@Param('projectId') projectId: string) {
     return this.issuesService.findByProjectId(projectId);
+  }
+
+  @Put('update')
+  async updateIssues(
+    @Body()
+    updatedIssues: { _id: string; status?: string; listPosition?: number }[],
+  ) {
+    return this.issuesService.updateIssues(updatedIssues);
   }
 }
