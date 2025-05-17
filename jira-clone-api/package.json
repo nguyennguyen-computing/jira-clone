@@ -26,9 +26,12 @@
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/mongoose": "^11.0.3",
     "@nestjs/platform-express": "^11.0.1",
+    "@vendia/serverless-express": "^4.12.6",
+    "aws-serverless-express": "^3.4.0",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "express": "^5.1.0",
     "mongoose": "^8.13.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
