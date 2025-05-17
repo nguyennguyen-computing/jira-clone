@@ -11,6 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    AppModule,
     ConfigModule.forRoot(),
     MongooseModule.forRoot(
       process.env.MONGO_URI || 'mongodb://localhost:27017/jira-clone',
