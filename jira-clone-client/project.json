@@ -30,16 +30,11 @@
         "production": {
           "fileReplacements": [
             {
-              "replace": "apps/your-app/src/environments/environment.ts",
-              "with": "apps/your-app/src/environments/environment.prod.ts"
+              "replace": "src/enviroments/enviroment.ts",
+              "with": "src/enviroments/enviroment.prod.ts"
             }
           ],
-          "optimization": true,
           "outputHashing": "all",
-          "sourceMap": false,
-          "namedChunks": false,
-          "extractLicenses": true,
-          "vendorChunk": false,
           "budgets": [
             {
               "type": "initial",
