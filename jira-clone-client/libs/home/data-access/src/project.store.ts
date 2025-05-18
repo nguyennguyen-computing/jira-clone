@@ -13,6 +13,7 @@ import { ProjectRequest, ProjectResponse } from './models/project.interface';
 import { ProjectsService } from './services/project.service';
 import { computed } from '@angular/core';
 import { AuthStore } from '@jira-clone/auth/data-access';
+import { ClientStore } from '@jira-clone/client-data-access';
 
 interface ProjectState {
   projects: ProjectResponse[];
@@ -57,7 +58,8 @@ export const ProjectStore = signalStore(
     (
       store,
       projectsService = inject(ProjectsService),
-      authStore = inject(AuthStore)
+      authStore = inject(AuthStore),
+      clientStore = inject(ClientStore)
     ) => ({
       loadProjects: rxMethod<{
         page: number;
@@ -66,7 +68,10 @@ export const ProjectStore = signalStore(
         status: string[];
       }>(
         pipe(
-          tap(() => patchState(store, { isLoading: true, error: null })),
+          tap(() => {
+            clientStore.setLoading(true);
+            patchState(store, { isLoading: true, error: null });
+          }),
           switchMap(({ page, limit, name, status }) =>
             projectsService
               .getProjects(
@@ -79,6 +84,7 @@ export const ProjectStore = signalStore(
               .pipe(
                 tapResponse({
                   next: ({ projects, total }) => {
+                    clientStore.setLoading(false);
                     patchState(store, {
                       projects,
                       currentPage: page,
@@ -88,6 +94,7 @@ export const ProjectStore = signalStore(
                     });
                   },
                   error: (error: string) => {
+                    clientStore.setLoading(false);
                     patchState(store, { isLoading: false, error });
                   },
                 })

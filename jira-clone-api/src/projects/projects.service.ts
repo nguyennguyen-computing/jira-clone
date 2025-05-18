@@ -82,10 +82,22 @@ export class ProjectsService {
       .exec();
   }
 
-  async getIssuesInProject(projectId: string): Promise<any[]> {
+  async getIssuesInProject(
+    projectId: string,
+    searchTerm?: string,
+    userIds?: string[],
+    status?: string[],
+  ): Promise<any[]> {
     const project = await this.projectModel
       .findById(projectId)
-      .populate('issues')
+      .populate({
+        path: 'issues',
+        match: {
+          ...(searchTerm && { title: { $regex: searchTerm, $options: 'i' } }),
+          ...(userIds && userIds.length > 0 && { status: { $in: userIds } }),
+          ...(status && status.length > 0 && { status: { $in: status } }),
+        },
+      })
       .exec();
 
     if (!project) {

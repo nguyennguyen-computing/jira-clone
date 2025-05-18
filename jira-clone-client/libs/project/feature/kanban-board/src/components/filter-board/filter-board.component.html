@@ -1,30 +1,54 @@
 <div class="flex items-center mt-6">
   <form class="w-40 mr-4">
-    <j-input aria-label="search" icon="search" [control]="searchControl">
-    </j-input>
+    <j-input
+      aria-label="search"
+      icon="search"
+      [control]="searchControl"
+    ></j-input>
   </form>
   <div class="flex flex-row mr-3">
-    <!-- <div
-      *ngFor="let user of projectQuery.users$ | async"
+    @for (user of usersInProject(); track user._id) {
+    <div
       class="lift-avatar"
       nz-tooltip
       [nzTooltipPlacement]="'bottom'"
-      [class.is-active]="isUserSelected(user)"
       [nzTooltipTitle]="user.name"
+      [class.is-active]="isUserSelected(user)"
+      (click)="userChanged(user)"
     >
       <lib-avatar
         class="flex"
         className="select-none shadow-outline-white"
-        [avatarUrl]="user.avatarUrl"
+        [avatarUrl]="user.avatarUrl || ''"
         [size]="36"
-      >
-      </lib-avatar>
-    </div> -->
+      ></lib-avatar>
+    </div>
+    }
   </div>
-  <j-button class="ml-3" className="btn-empty"> Only My Issues </j-button>
-  <j-button class="ml-3" className="btn-empty"> Ignore Resolved </j-button>
+  @let onlyMyIssue = filterStore.onlyMyIssue();
+  <j-button
+    class="ml-3"
+    className="btn-empty"
+    [isActive]="onlyMyIssue"
+    (click)="onlyMyIssueChanged()"
+  >
+    Only My Issues
+  </j-button>
+  @let ignoreResolve = filterStore.ignoreResolve();
+  <j-button
+    class="ml-3"
+    className="btn-empty"
+    [isActive]="ignoreResolve"
+    (click)="ignoreResolvedChanged()"
+  >
+    Ignore Resolved
+  </j-button>
+  @if(filterStore.hasActiveFilters()) {
   <div class="ml-3 flex items-center">
     <div class="mr-3 w-px bg-backgroundMedium self-stretch"></div>
-    <j-button [className]="'btn-secondary'">Clear all </j-button>
+    <j-button [className]="'btn-secondary'" (click)="resetAll()"
+      >Clear all</j-button
+    >
   </div>
+  }
 </div>

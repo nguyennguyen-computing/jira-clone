@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NavigationComponent } from './layout/navigation-workspace/navigation/navigation.component';
 import { RouterModule } from '@angular/router';
 import { SvgDefinitionComponent } from '@jira-clone/svg-icon';
-import { shellRoutes } from './shell.routes';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @Component({
   selector: 'lib-shell',
@@ -12,6 +12,7 @@ import { shellRoutes } from './shell.routes';
     NavigationComponent,
     RouterModule,
     SvgDefinitionComponent,
+    NzSpinModule,
   ],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',

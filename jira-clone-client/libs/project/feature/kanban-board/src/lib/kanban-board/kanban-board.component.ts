@@ -28,9 +28,9 @@ import { ActivatedRoute } from '@angular/router';
 export class KanbanBoardComponent {
   readonly projectDetailStore = inject(ProjectDetailStore);
 
-  breadcrumbs: string[] = ['Projects', 'Angular Jira Clone', 'Kanban Board'];
-
   private readonly route = inject(ActivatedRoute);
+
+  breadcrumbs: string[] = ['Projects', 'Angular Jira Clone', 'Kanban Board'];
 
   issueStatuses = signal<IssueStatus[]>([
     IssueStatus.BACKLOG,

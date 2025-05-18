@@ -80,9 +80,6 @@ export class AddIssueComponent {
 
   constructor() {
     this.initForm();
-    this.projectStore.getUserInProject(
-      this.projectStore.project()?._id as string
-    );
 
     effect(() => {
       if (this.issueStore.issueCreated()) {
