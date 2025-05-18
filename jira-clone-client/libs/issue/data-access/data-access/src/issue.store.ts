@@ -3,7 +3,6 @@ import {
   signalStore,
   withState,
   withMethods,
-  withHooks,
   patchState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';

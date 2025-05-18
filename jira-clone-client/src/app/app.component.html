@@ -1,3 +1,5 @@
-<router-outlet></router-outlet>
-
-<lib-svg-definition></lib-svg-definition>
+<div id="app-frame">
+  <nz-spin class="global-spinner" [nzSpinning]="isLoading()" nzSize="large">
+    <router-outlet></router-outlet>
+  </nz-spin>
+</div>

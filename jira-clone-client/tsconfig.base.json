@@ -19,6 +19,9 @@
       "@jira-clone/auth": ["libs/auth/src/index.ts"],
       "@jira-clone/auth-guard": ["libs/core/guards/auth-guard/src/index.ts"],
       "@jira-clone/auth/data-access": ["libs/auth/data-access/src/index.ts"],
+      "@jira-clone/client-data-access": [
+        "libs/client/data-access/src/index.ts"
+      ],
       "@jira-clone/config": ["libs/core/config/src/index.ts"],
       "@jira-clone/home": ["libs/home/feature/home/src/index.ts"],
       "@jira-clone/home-data-access": ["libs/home/data-access/src/index.ts"],
