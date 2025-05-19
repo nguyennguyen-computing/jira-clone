@@ -11,6 +11,13 @@
     (cdkDropListDropped)="drop($event)"
   >
     @for (issue of issues(); track issue._id) {
-    <issue-card [issue]="issue" cdkDrag [cdkDragData]="issue"> </issue-card>}
+    <issue-card
+      (click)="openIssueModal(issue._id || '')"
+      [issue]="issue"
+      cdkDrag
+      [cdkDragData]="issue"
+    >
+    </issue-card
+    >}
   </div>
 </div>
