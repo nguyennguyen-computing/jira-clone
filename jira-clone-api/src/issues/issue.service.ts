@@ -20,9 +20,9 @@ export class IssuesService {
       .exec();
   }
 
-  async findOne(id: string): Promise<Issue | null> {
+  async findOne(_id: string): Promise<Issue | null> {
     return this.issueModel
-      .findOne({ id })
+      .findOne({ _id })
       .populate('projectId reporterId userIds')
       .exec();
   }

@@ -2,7 +2,7 @@ import { IssueType } from '../constant/issue.const';
 import { IssueUtil } from '@jira-clone/util';
 
 export class IssueTypeWithIcon {
-  value: string;
+  value: IssueType;
   icon: string;
 
   constructor(issueType: IssueType) {

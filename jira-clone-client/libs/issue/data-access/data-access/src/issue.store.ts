@@ -62,6 +62,28 @@ export const IssueStore = signalStore(
           )
         )
       ),
+      getIssueById: rxMethod<string>(
+        pipe(
+          tap(() => patchState(store, { loading: true, error: null })),
+          switchMap((id) =>
+            issuesService.getIssueById(id).pipe(
+              tapResponse({
+                next: (issue) => {
+                  patchState(store, {
+                    issue,
+                    loading: false,
+                  });
+                },
+                error: (error: any) =>
+                  patchState(store, {
+                    error: error.message || 'Failed to fetch issue',
+                    loading: false,
+                  }),
+              })
+            )
+          )
+        )
+      ),
       resetIssueCreated(): void {
         patchState(store, { issueCreated: false });
       },

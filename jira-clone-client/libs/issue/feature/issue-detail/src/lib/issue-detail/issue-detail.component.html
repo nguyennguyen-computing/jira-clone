@@ -1,1 +1,32 @@
-<p>IssueDetail works!</p>
+<div class="px-3">
+  @if(issue(); as issue) {
+  <div class="w-full h-full pl-4">
+    <div class="flex items-center pt-4 text-textDarkest">
+      <issue-type [issue]="issue"></issue-type>
+      <div class="flex-auto"></div>
+      <j-button icon="trash" [className]="'btn-empty'"> </j-button>
+      <j-button icon="expand" [iconSize]="24" [className]="'btn-empty'">
+      </j-button>
+      <j-button
+        icon="times"
+        [iconSize]="24"
+        (click)="closeModal()"
+        [className]="'btn-empty'"
+      >
+      </j-button>
+    </div>
+    <div class="flex w-full flex-wrap pb-16">
+      <div class="sm:w-full md:w-7/12 lg:w-4/6 pr-10">
+        <issue-title [issue]="issue"></issue-title>
+
+        <!-- <div class="pt-4 pb-2 text-15 font-medium">Description</div>
+        <issue-description [issue]="issue"></issue-description>
+
+        <div class="pt-4 pb-2 text-15 font-medium">Comments</div>
+        <issue-comments [issue]="issue"></issue-comments> -->
+      </div>
+      <div class="sm:w-full md:w-5/12 lg:w-2/6 pt-1"></div>
+    </div>
+  </div>
+  }
+</div>
