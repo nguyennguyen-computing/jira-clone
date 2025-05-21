@@ -3,7 +3,7 @@ import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
 import { computed } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { pipe, switchMap, tap } from 'rxjs';
+import { finalize, pipe, switchMap, tap } from 'rxjs';
 import { Project } from './project.model';
 import { ProjectDetailService } from './services/project-detail.service';
 import { IssueCreate, User } from '@jira-clone/interface';
@@ -79,9 +79,16 @@ export const ProjectDetailStore = signalStore(
         ),
         getIssuesByProjectId: rxMethod<string>(
           pipe(
-            tap((id) => patchState(store, { loading: true, error: null })),
+            tap((id) => {
+              clientStore.setLoading(true);
+              patchState(store, { loading: true, error: null });
+            }),
             switchMap((id) =>
               projectDetailService.getIssuesByProjectId(id).pipe(
+                finalize(() => {
+                  clientStore.setLoading(false);
+                  patchState(store, { loading: false });
+                }),
                 tapResponse({
                   next: (issues) => {
                     issues.sort((a, b) => a.listPosition - b.listPosition);
@@ -108,19 +115,20 @@ export const ProjectDetailStore = signalStore(
             }),
             switchMap((updatedIssues) =>
               projectDetailService.updateIssues(updatedIssues).pipe(
+                finalize(() => {
+                  clientStore.setLoading(false);
+                  patchState(store, { loading: false });
+                }),
                 tapResponse({
                   next: (issues) => {
-                    clientStore.setLoading(false);
                     patchState(store, {
                       issues: sortIssues(issues),
-                      loading: false,
                     });
                   },
                   error: (error: any) => {
                     clientStore.setLoading(false);
                     patchState(store, {
                       error: error.message || 'Failed to update issues',
-                      loading: false,
                     });
                   },
                 })

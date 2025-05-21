@@ -1,10 +1,5 @@
 import { inject } from '@angular/core';
-import {
-  signalStore,
-  withState,
-  withMethods,
-  patchState,
-} from '@ngrx/signals';
+import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { pipe, switchMap, tap } from 'rxjs';
@@ -65,8 +60,12 @@ export const IssueStore = signalStore(
       getIssueById: rxMethod<string>(
         pipe(
           tap(() => patchState(store, { loading: true, error: null })),
-          switchMap((id) =>
-            issuesService.getIssueById(id).pipe(
+          switchMap((id) => {
+            patchState(store, {
+              issue: null,
+              loading: false,
+            });
+            return issuesService.getIssueById(id).pipe(
               tapResponse({
                 next: (issue) => {
                   patchState(store, {
@@ -80,8 +79,8 @@ export const IssueStore = signalStore(
                     loading: false,
                   }),
               })
-            )
-          )
+            );
+          })
         )
       ),
       resetIssueCreated(): void {
