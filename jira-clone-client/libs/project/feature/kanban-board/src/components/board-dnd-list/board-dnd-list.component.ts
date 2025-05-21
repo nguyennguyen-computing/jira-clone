@@ -21,11 +21,7 @@ import { IssueStore } from '@jira-clone/issue-data-access';
 @Component({
   selector: '[board-dnd-list]',
   standalone: true,
-  imports: [
-    CommonModule,
-    DragDropModule,
-    IssueCardComponent,
-  ],
+  imports: [CommonModule, DragDropModule, IssueCardComponent],
   providers: [NzModalService],
   templateUrl: './board-dnd-list.component.html',
   styleUrl: './board-dnd-list.component.scss',
@@ -41,12 +37,11 @@ export class BoardDndListComponent {
 
   IssueStatusDisplay = IssueStatusDisplay;
   IssueStatus = IssueStatus;
-  
+
   constructor() {
     effect(() => {
       console.log(this._issueStore.issue());
-    }
-    );
+    });
   }
 
   drop(event: CdkDragDrop<IssueCreate[]>) {
@@ -108,7 +103,7 @@ export class BoardDndListComponent {
   }
 
   openIssueModal(issueId: string) {
-    this._issueStore.getIssueById(issueId)
+    this._issueStore.getIssueById(issueId);
     this._modalService.create({
       nzContent: IssueDetailComponent,
       nzWidth: 1040,

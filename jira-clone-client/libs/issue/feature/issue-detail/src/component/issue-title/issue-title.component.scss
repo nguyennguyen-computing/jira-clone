@@ -5,4 +5,5 @@
 .textarea-inline-control {
   @apply text-2xl font-medium;
   margin-left: -8px;
+  box-sizing: content-box;
 }
