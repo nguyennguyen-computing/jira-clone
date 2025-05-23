@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, effect, inject, input, OnInit } from '@angular/core';
 import {
   CdkDragDrop,
   DragDropModule,
@@ -14,22 +14,35 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { IssueCreate } from '@jira-clone/interface';
 import { IssueCardComponent } from '@jira-clone/svg-icon';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { IssueDetailComponent } from '@jira-clone/issue-detail';
+import { IssueStore } from '@jira-clone/issue-data-access';
 
 @Component({
   selector: '[board-dnd-list]',
   standalone: true,
   imports: [CommonModule, DragDropModule, IssueCardComponent],
+  providers: [NzModalService],
   templateUrl: './board-dnd-list.component.html',
   styleUrl: './board-dnd-list.component.scss',
 })
 export class BoardDndListComponent {
   readonly projectDetailStore = inject(ProjectDetailStore);
 
+  private _modalService = inject(NzModalService);
+  private _issueStore = inject(IssueStore);
+
   status = input<IssueStatus>();
   issues = input<IssueCreate[]>();
 
   IssueStatusDisplay = IssueStatusDisplay;
   IssueStatus = IssueStatus;
+
+  constructor() {
+    effect(() => {
+      console.log(this._issueStore.issue());
+    });
+  }
 
   drop(event: CdkDragDrop<IssueCreate[]>) {
     let newIssue: IssueCreate = { ...event.item.data };
@@ -87,5 +100,18 @@ export class BoardDndListComponent {
       );
       this.projectDetailStore.updateIssuesStatus(newIssue.status, newIssues);
     }
+  }
+
+  openIssueModal(issueId: string) {
+    this._issueStore.getIssueById(issueId);
+    this._modalService.create({
+      nzContent: IssueDetailComponent,
+      nzWidth: 1040,
+      nzClosable: false,
+      nzFooter: null,
+      nzData: {
+        issue: this._issueStore.issue(),
+      },
+    });
   }
 }

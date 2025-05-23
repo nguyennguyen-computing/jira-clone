@@ -37,17 +37,3 @@ board-dnd {
     max-height: unset !important;
   }
 }
-
-//ng-zorro override
-body {
-  overflow: hidden;
-}
-
-body,
-.ant-modal {
-  @apply text-textDark;
-}
-
-.ant-modal-body {
-  padding: 0;
-}

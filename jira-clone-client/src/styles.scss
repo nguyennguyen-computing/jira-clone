@@ -18,3 +18,17 @@ body {
     transform: translate(-50%, -50%);
   }
 }
+
+//ng-zorro override
+body {
+  overflow: hidden;
+}
+
+body,
+.ant-modal {
+  @apply text-textDark;
+}
+
+.ant-modal-body {
+  padding: 0;
+}

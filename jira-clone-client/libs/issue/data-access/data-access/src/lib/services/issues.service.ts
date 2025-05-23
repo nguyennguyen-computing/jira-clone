@@ -11,4 +11,8 @@ export class IssuesService {
   createIssue(body: IssueCreate): Observable<IssueCreate> {
     return this.apiService.post(`/issues`, body);
   }
+
+  getIssueById(issueId: string): Observable<IssueCreate> {
+    return this.apiService.get(`/issues/${issueId}`);
+  }
 }
