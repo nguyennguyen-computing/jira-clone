@@ -14,7 +14,6 @@ export class UsersController {
 
   @Get()
   async findAll() {
-    console.log('Fetching all users'); // Debugging
     return this.usersService.findAll();
   }
 

@@ -1,0 +1,8 @@
+<issue-comment
+  [createMode]="true"
+  [issueId]="issue()?._id || ''"
+></issue-comment>
+
+@for (comment of issue()?.comments ?? []; track comment.id) {
+<issue-comment [comment]="comment"></issue-comment>
+}

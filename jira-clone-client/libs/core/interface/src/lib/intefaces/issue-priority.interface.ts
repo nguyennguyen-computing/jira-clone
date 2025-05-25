@@ -3,7 +3,7 @@ import { IssuePriority, IssuePriorityColors } from "../constant/issue.const";
 
 export class IssuePriorityIcon {
   icon: string;
-  value: string;
+  value: IssuePriority;
   color: string;
 
   constructor(issuePriority: IssuePriority) {

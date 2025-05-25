@@ -47,7 +47,6 @@ IssueSchema.pre<Issue>('save', async function (next) {
     .findOne({ projectId: this.projectId })
     .sort({ listPosition: -1 })
     .exec();
-  console.log('lastIssue', lastIssue);
 
   this.listPosition = lastIssue ? lastIssue.listPosition + 1 : 1;
   next();
