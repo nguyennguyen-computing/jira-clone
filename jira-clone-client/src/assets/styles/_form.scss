@@ -55,6 +55,7 @@ form {
 
 //text-area
 .textarea-inline-control {
+  min-height: fit-content;
   border-color: transparent;
   padding: 7px 7px 8px;
   line-height: 1.28;

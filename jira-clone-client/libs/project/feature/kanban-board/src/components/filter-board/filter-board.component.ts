@@ -38,11 +38,9 @@ export class FilterBoardComponent implements OnInit {
   searchControl = new FormControl('');
   
   constructor() {
-    // Debounce search term updates
     effect(() => {
       const projectId = this.route.snapshot.paramMap.get('id') || '';
-      const filterState = this.filterStore.userIds(); // Access the current filter state
-      console.log('Filter state:', filterState);
+      const filterState = this.filterStore.userIds();
     });
     this.searchControl.valueChanges
     .pipe(debounceTime(300), distinctUntilChanged())

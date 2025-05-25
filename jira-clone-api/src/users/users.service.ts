@@ -20,7 +20,6 @@ export class UsersService {
       };
       return await this.userModel.find(filter).exec();
     } catch (error) {
-      console.error('Error finding users by name:', error);
       throw new Error('Failed to search users');
     }
   }

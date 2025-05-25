@@ -1,0 +1,44 @@
+<div class="mt-6 mb-1 uppercase text-textMedium text-13 font-bold">
+  Assignees
+</div>
+
+@for (assignee of users(); track assignee._id) {
+<j-button className="btn-secondary mr-1-5 mb-2">
+  <div class="flex items-center">
+    <lib-user-component [user]="assignee"></lib-user-component>
+    <lib-svg-icon
+      (click)="removeUser(assignee._id)"
+      title="Remove user"
+      [size]="20"
+      [name]="'times'"
+      class="text-textLight"
+      aria-label="Remove assignee"
+    ></lib-svg-icon>
+  </div>
+</j-button>
+} @empty {
+<div class="no-assignees text-textMedium text-13">No assignees</div>
+}
+
+<a
+  class="add-more"
+  nz-dropdown
+  [nzTrigger]="'click'"
+  [nzDropdownMenu]="menu"
+  aria-label="Add assignee"
+>
+  <i class="mr-1" nz-icon nzType="plus" nzTheme="outline"></i>
+  Add Assignee
+</a>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul class="mt-3" nz-menu nzNoAnimation>
+    @for (option of users(); track option._id) { @if (!isUserSelected(option)) {
+    <li nz-menu-item (click)="addUserToIssue(option)">
+      <lib-user-component [user]="option"></lib-user-component>
+    </li>
+    } } @empty {
+    <li class="p-2 text-textMedium text-13">No users available</li>
+    }
+  </ul>
+</nz-dropdown-menu>

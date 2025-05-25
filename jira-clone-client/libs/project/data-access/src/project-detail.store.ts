@@ -6,7 +6,7 @@ import { tapResponse } from '@ngrx/operators';
 import { finalize, pipe, switchMap, tap } from 'rxjs';
 import { Project } from './project.model';
 import { ProjectDetailService } from './services/project-detail.service';
-import { IssueCreate, User } from '@jira-clone/interface';
+import { IssueCreate, IssueStatus, User } from '@jira-clone/interface';
 import { ClientStore } from '@jira-clone/client-data-access';
 
 interface ProjectState {
@@ -155,7 +155,7 @@ export const ProjectDetailStore = signalStore(
         updateIssuesStatus(status: string, updatedIssues: IssueCreate[]): void {
           const updatedIssuesWithStatus = updatedIssues.map((issue) => ({
             ...issue,
-            status,
+            status: status as IssueStatus,
           }));
 
           const otherIssues = store
@@ -169,7 +169,7 @@ export const ProjectDetailStore = signalStore(
 
           const newIssues = [...otherIssues, ...updatedIssuesWithStatus];
 
-          this.updateIsssues(newIssues);
+          this.updateIsssues(newIssues as IssueCreate[]);
           patchState(store, { issues: newIssues });
         },
       };

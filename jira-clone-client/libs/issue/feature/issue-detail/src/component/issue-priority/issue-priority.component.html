@@ -1,0 +1,45 @@
+<div class="mt-6 mb-1 uppercase text-textMedium text-13 font-bold">
+  Priority
+</div>
+<j-button
+  className="btn-secondary"
+  nz-dropdown
+  nzTrigger="click"
+  [nzDropdownMenu]="menu"
+  aria-label="Change issue priority"
+>
+  <div class="flex items-center">
+    <lib-svg-icon
+      [name]="selectedPriorityIcon().icon"
+      [size]="20"
+      [style.color]="selectedPriorityIcon().color"
+    ></lib-svg-icon>
+    <span class="ml-3 priority-label">
+      {{ selectedPriorityIcon().value }}
+    </span>
+  </div>
+</j-button>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul class="mt-3" nz-menu nzNoAnimation>
+    @for (option of priorities(); track option.value) { @if
+    (!isPrioritySelected(option.value)) {
+    <li nz-menu-item (click)="updateIssue(option.value)">
+      <div class="flex items-center">
+        <lib-svg-icon
+          [name]="option.icon"
+          [size]="20"
+          [style.color]="option.color"
+        ></lib-svg-icon>
+        <span
+          class="ml-3 priority-label font-semibold uppercase text-textMedium text-13"
+        >
+          {{ option.value }}
+        </span>
+      </div>
+    </li>
+    } } @empty {
+    <li class="p-2 text-textMedium text-13">No priorities available</li>
+    }
+  </ul>
+</nz-dropdown-menu>

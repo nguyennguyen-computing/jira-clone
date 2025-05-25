@@ -10,5 +10,5 @@ import { User } from '@jira-clone/auth/data-access';
   styleUrl: './user-component.component.scss',
 })
 export class UserComponentComponent {
-  user = input<User>();
+  user = input<User | null>();
 }

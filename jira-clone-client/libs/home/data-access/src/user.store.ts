@@ -42,7 +42,6 @@ export const UserStore = signalStore(
           userService.searchUser(name).pipe(
             tapResponse({
               next: (users) => {
-                console.log('Users:', users);
                 patchState(store, {
                   users,
                   isLoading: false,

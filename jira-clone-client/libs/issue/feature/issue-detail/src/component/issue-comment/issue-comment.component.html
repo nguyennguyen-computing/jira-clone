@@ -1,0 +1,58 @@
+<div class="relative mt-3 text-15">
+  <lib-avatar
+    class="absolute top-0 left-0"
+    [avatarUrl]="user()?.avatarUrl ?? ''"
+    [size]="30"
+  ></lib-avatar>
+  <div class="pl-10">
+    <!-- @if (comment()) { -->
+    <div class="inline-block mr-3 mb-2 text-textDark font-medium">
+      {{ user()?.name }}
+    </div>
+    @if (!createMode()) {
+    <div class="inline-block pb-2 text-textDark text-sm">
+      {{ comment()?.updatedAt | date : 'medium' }}
+    </div>
+    } @if (createMode()) {
+    <div class="editing-area">
+      <textarea
+        #commentBoxRef
+        class="textarea-inline-control textarea-border"
+        [formControl]="commentControl"
+        placeholder="Add a comment"
+        rows="2"
+        cdkTextareaAutosize
+        (click)="setCommentEdit(true)"
+      ></textarea>
+      @if (!isEditing()) {
+      <div class="text-xs">
+        <strong>Pro tip: </strong>press
+        <span class="px-1 font-semibold bg-backgroundMedium">M</span> to comment
+      </div>
+      } @else {
+      <div class="flex pt-2 pb-4 items-center">
+        <j-button className="btn btn-primary mr-2" (click)="addComment()">
+          Save
+        </j-button>
+        <j-button className="btn btn-empty" (click)="cancelAddComment()">
+          Cancel
+        </j-button>
+      </div>
+      }
+    </div>
+    } @else {
+    <div [innerHTML]="comment()?.body"></div>
+    }
+    <!-- @if (comment().history) {
+    <div class="comment-history mt-4">
+      <h3>Comment History</h3>
+      @for (history of comment().history; track history.id) {
+      <div class="history-item p-2 border-b">
+        <p [innerHTML]="history.body"></p>
+        <small>Updated: {{ history.updatedAt | date : 'medium' }}</small>
+      </div>
+      } @empty { No comment history available. }
+    </div>
+    }  -->
+  </div>
+</div>

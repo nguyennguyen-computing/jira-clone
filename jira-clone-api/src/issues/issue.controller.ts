@@ -18,7 +18,6 @@ export class IssuesController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    console.log('findOne', id);
     return this.issuesService.findOne(id);
   }
 

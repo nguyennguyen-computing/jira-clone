@@ -108,7 +108,6 @@ export class ProjectsService {
   }
 
   async getUsersInProject(projectId: string): Promise<any[]> {
-    console.log('getUsersInProject', projectId);
     const project = await this.projectModel
       .findById(projectId)
       .populate({
@@ -116,11 +115,7 @@ export class ProjectsService {
         select: '-password',
       })
       .exec();
-    console.log(
-      'Project before populate:',
-      await this.projectModel.findById(projectId).exec(),
-    );
-    console.log('Project after populate:', project);
+ 
     if (!project) {
       throw new BadRequestException('Project not found');
     }

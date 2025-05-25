@@ -37,3 +37,7 @@ board-dnd {
     max-height: unset !important;
   }
 }
+
+body, html, textarea, input, select, button {
+  box-sizing: border-box;
+}
