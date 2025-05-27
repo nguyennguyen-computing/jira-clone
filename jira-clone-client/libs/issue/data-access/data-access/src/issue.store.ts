@@ -95,6 +95,43 @@ export const IssueStore = signalStore(
             })
           )
         ),
+
+        updateIssue: rxMethod<{
+          issueId?: string;
+          updateData: {
+            status?: string;
+            listPosition?: number;
+            [key: string]: any;
+          };
+        }>(
+          pipe(
+            tap(() => {
+              patchState(store, { loading: true, error: null });
+            }),
+            switchMap(({ issueId, updateData }) =>
+              issuesService.updateIssue(issueId, updateData).pipe(
+                tapResponse({
+                  next: (updatedIssue) => {
+                    patchState(store, {
+                      issue: updatedIssue,
+                      loading: false,
+                    });
+
+                    const projectId = updatedIssue.projectId;
+                    if (projectId) {
+                      projectDetailStore.getIssuesByProjectId(projectId);
+                    }
+                  },
+                  error: (error: any) =>
+                    patchState(store, {
+                      error: error.message || 'Failed to update issue',
+                      loading: false,
+                    }),
+                })
+              )
+            )
+          )
+        ),
         resetIssueCreated(): void {
           patchState(store, { issueCreated: false });
         },

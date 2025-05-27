@@ -15,4 +15,11 @@ export class IssuesService {
   getIssueById(issueId: string): Observable<IssueCreate> {
     return this.apiService.get(`/issues/${issueId}`);
   }
+
+  updateIssue(
+    issueId?: string,
+    body?: { status?: string; listPosition?: number; [key: string]: any }
+  ): Observable<IssueCreate> {
+    return this.apiService.patch(`/issues/${issueId}`, body);
+  }
 }

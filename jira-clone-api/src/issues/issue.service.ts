@@ -35,7 +35,7 @@ export class IssuesService {
   }
 
   async updateIssues(
-    updatedIssues: { _id: string; status?: string; listPosition?: number }[]
+    updatedIssues: { _id: string; status?: string; listPosition?: number }[],
   ): Promise<Issue[]> {
     const bulkOperations = updatedIssues.map((issue) => ({
       updateOne: {
@@ -43,10 +43,38 @@ export class IssuesService {
         update: { $set: { ...issue } },
       },
     }));
-  
+
     await this.issueModel.bulkWrite(bulkOperations);
-  
+
     const updatedIds = updatedIssues.map((issue) => issue._id);
-    return this.issueModel.find({ _id: { $in: updatedIds } }).populate('reporterId userIds').exec();
+    return this.issueModel
+      .find({ _id: { $in: updatedIds } })
+      .populate('reporterId userIds')
+      .exec();
+  }
+
+  async updateIssue(
+    issueId: string,
+    updateData: { status?: string; listPosition?: number; [key: string]: any }
+  ): Promise<Issue | null> {
+    const issue = await this.issueModel.findById(issueId).exec();
+  
+    if (!issue) {
+      throw new Error('Issue not found');
+    }
+  
+    if (updateData.status && updateData.status !== issue.status) {
+      const issuesInStatus = await this.issueModel
+        .find({ status: updateData.status })
+        .sort({ listPosition: 1 }) 
+        .exec();
+  
+      updateData.listPosition = issuesInStatus.length;
+    }
+  
+    return this.issueModel
+      .findByIdAndUpdate(issueId, { $set: updateData }, { new: true })
+      .populate('reporterId userIds')
+      .exec();
   }
 }
