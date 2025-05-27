@@ -30,6 +30,13 @@ export class ApiService {
     });
   }
 
+  patch<T, D>(url: string, data: D): Observable<T> {
+    return this.http.patch<T>(`${this.api_url}${url}`, JSON.stringify(data), {
+      headers: this.headers,
+      withCredentials: true,
+    });
+  }
+
   delete<T>(url: string): Observable<T> {
     return this.http.delete<T>(`${this.api_url}${url}`, {
       headers: this.headers,

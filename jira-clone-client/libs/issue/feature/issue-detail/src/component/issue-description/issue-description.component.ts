@@ -1,6 +1,7 @@
 import {
   Component,
   effect,
+  inject,
   input,
   signal,
   ViewEncapsulation,
@@ -11,6 +12,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { ButtonComponent } from '@jira-clone/svg-icon';
 import { IssueCreate } from '@jira-clone/interface';
 import { quillConfiguration } from '@jira-clone/config';
+import { IssueStore } from '@jira-clone/issue-data-access';
 
 @Component({
   selector: 'issue-description',
@@ -21,6 +23,7 @@ import { quillConfiguration } from '@jira-clone/config';
   encapsulation: ViewEncapsulation.None,
 })
 export class IssueDescriptionComponent {
+  private readonly _issueStore = inject(IssueStore);
   issue = input.required<IssueCreate>();
 
   descriptionControl = new FormControl<string>('');
@@ -49,6 +52,12 @@ export class IssueDescriptionComponent {
   save(): void {
     this.isWorking.set(true);
     this.isWorking.set(false);
+    this._issueStore.updateIssue({
+      issueId: this.issue()._id,
+      updateData: {
+        description: this.descriptionControl.value,
+      },
+    });
     this.setEditMode(false);
   }
 
